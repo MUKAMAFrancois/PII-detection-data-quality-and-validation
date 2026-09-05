@@ -266,6 +266,3 @@ Column-level validation cannot catch these. Implement as DataFrame-level checks.
 | Many rows share one address | 20 accounts, one address | Fraud signal |
 
 ---
-
-
-
