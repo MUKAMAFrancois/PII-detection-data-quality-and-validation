@@ -29,41 +29,42 @@ from __future__ import annotations
 import csv
 import io
 import re
-import unicodedata
 from datetime import date, datetime
 from pathlib import Path
 
 import pandas as pd
 
-# --------------------------------------------------------------------------- #
-# Configuration
-# --------------------------------------------------------------------------- #
+from .config import (
+    ADDRESS_MAX_LEN,
+    ADDRESS_MIN_LEN,
+    ADULT_AGE_YEARS,
+    CUSTOMER_ID_MIN,
+    DATE_INPUT_FORMATS,
+    DATE_OUTPUT_FORMAT,
+    EMAIL_RE,
+    INCOME_MAX,
+    INPUT_ENCODING,
+    ISO_DATE_RE,
+    MAX_AGE_YEARS,
+    NAME_RE,
+    PHONE_CLEAN_RE,
+    PHONE_DIGITS_RE,
+    QUALITY_REPORT_PATH,
+    RAW_PATH,
+    REPORT_BORDER,
+    REPORT_RULE,
+    SCHEMA,
+    SENTINEL_DATES,
+    STATUS_CANONICAL_MAP,
+    STATUS_UNMAPPABLE,
+    VALID_STATUSES,
+    clean_ws,
+    dob_bounds,
+    is_null_sentinel,
+    is_present,
+)
 
-RAW_PATH = Path("data/raw/customers_raw.csv")
-REPORT_PATH = Path("reports/data_quality_report.txt")
-
-SCHEMA = [
-    "customer_id", "first_name", "last_name", "email", "phone",
-    "date_of_birth", "address", "income", "account_status", "created_date",
-]
-
-NULL_SENTINELS = {
-    "", "null", "none", "nan", "na", "n/a", "#n/a", "-",
-    "--", "?", "tbd", "unknown", "not provided",
-}
-
-VALID_STATUSES = {"active", "inactive", "suspended"}
-
-EMAIL_RE = re.compile(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")
-PHONE_CLEAN_RE = re.compile(r"^\d{3}-\d{3}-\d{4}$")
-PHONE_DIGITS_RE = re.compile(r"^\d{10}$")
-ISO_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-NAME_RE = re.compile(r"^[^\W\d_]+(?:[ '\-][^\W\d_]+)*$", re.UNICODE)
-
-DOB_MIN, DOB_MAX = date(1900, 1, 1), date.today()
-INCOME_MAX = 10_000_000
-
-SENTINEL_DATES = ["1900-01-01", "1970-01-01", "9999-12-31", "1111-11-11"]
+DOB_MIN, TODAY = dob_bounds()
 
 
 # --------------------------------------------------------------------------- #
@@ -78,7 +79,7 @@ def load_raw(path: Path = RAW_PATH) -> tuple[pd.DataFrame, dict]:
     notes["has_bom"] = raw_bytes.startswith(b"\xef\xbb\xbf")
     notes["has_cr_lines"] = b"\r" in raw_bytes
 
-    text = raw_bytes.decode("utf-8-sig", errors="replace")
+    text = raw_bytes.decode(INPUT_ENCODING, errors="replace")
     notes["has_mojibake"] = ("Ã©" in text or "Ã¼" in text or "â€" in text)
     notes["replacement_chars"] = text.count("\ufffd")
 
@@ -113,29 +114,7 @@ def load_raw(path: Path = RAW_PATH) -> tuple[pd.DataFrame, dict]:
 # --------------------------------------------------------------------------- #
 # Cell-level helpers
 # --------------------------------------------------------------------------- #
-
-def is_null_sentinel(value: str) -> bool:
-    """Whitespace + unicode-variant stripping before sentinel comparison."""
-    cleaned = (str(value)
-               .replace("\u00a0", " ")   # non-breaking space
-               .replace("\u200b", "")    # zero-width space
-               .replace("\r", "")
-               .strip()
-               .lower())
-    return cleaned in NULL_SENTINELS
-
-
-def is_present(value: str) -> bool:
-    return not is_null_sentinel(value)
-
-
-def clean_ws(value: str) -> str:
-    """Unicode-normalize and strip hidden characters for inspection."""
-    return (unicodedata.normalize("NFKC", str(value))
-            .replace("\u200b", "")
-            .replace("\r", "")
-            .strip())
-
+# clean_ws / is_null_sentinel / is_present come from config.
 
 def present_values(df: pd.DataFrame, col: str) -> pd.Series:
     """Cleaned, non-sentinel values for one column."""
@@ -148,7 +127,7 @@ def present_values(df: pd.DataFrame, col: str) -> pd.Series:
 # --------------------------------------------------------------------------- #
 
 def profile_completeness(df: pd.DataFrame) -> tuple[list[str], pd.DataFrame]:
-    lines: list[str] = ["", "-" * 74, "2. COMPLETENESS", "-" * 74]
+    lines: list[str] = ["", REPORT_RULE, "2. COMPLETENESS", REPORT_RULE]
     n = len(df)
     stats = []
     for col in df.columns:
@@ -185,7 +164,7 @@ def _parseable_date(v: str) -> bool:
 
 
 def profile_types(df: pd.DataFrame) -> list[str]:
-    lines = ["", "-" * 74, "3. TYPE INFERENCE (non-null values)", "-" * 74]
+    lines = ["", REPORT_RULE, "3. TYPE INFERENCE (non-null values)", REPORT_RULE]
 
     def rate(vals: list[str], test) -> float:
         return 100.0 * sum(bool(test(v)) for v in vals) / len(vals)
@@ -239,8 +218,7 @@ def profile_types(df: pd.DataFrame) -> list[str]:
 # --------------------------------------------------------------------------- #
 
 def _try_any_date(v: str) -> bool:
-    for fmt in ("%Y-%m-%d", "%m/%d/%Y", "%Y/%m/%d", "%d-%m-%Y", "%m-%d-%Y",
-                "%B %d, %Y", "%b %d, %Y", "%d %b %Y", "%d-%b-%Y", "%m/%d/%y"):
+    for fmt in DATE_INPUT_FORMATS:
         try:
             datetime.strptime(v.split(" x")[0].split("T")[0].strip(), fmt)
             return True
@@ -254,7 +232,7 @@ def _try_any_date(v: str) -> bool:
 
 
 def profile_formats(df: pd.DataFrame) -> list[str]:
-    lines = ["", "-" * 74, "4. FORMAT ISSUES", "-" * 74]
+    lines = ["", REPORT_RULE, "4. FORMAT ISSUES", REPORT_RULE]
 
     # ---- phone ----
     phones = present_values(df, "phone")
@@ -317,7 +295,7 @@ def profile_formats(df: pd.DataFrame) -> list[str]:
 # --------------------------------------------------------------------------- #
 
 def profile_uniqueness(df: pd.DataFrame) -> list[str]:
-    lines = ["", "-" * 74, "5. UNIQUENESS", "-" * 74]
+    lines = ["", REPORT_RULE, "5. UNIQUENESS", REPORT_RULE]
     n = len(df)
     for col in ("customer_id", "email", "phone"):
         vals = present_values(df, col)
@@ -345,47 +323,54 @@ def _numeric(series: pd.Series) -> pd.Series:
 
 
 def profile_invalid(df: pd.DataFrame) -> list[str]:
-    lines = ["", "-" * 74, "6. INVALID VALUES", "-" * 74]
+    lines = ["", REPORT_RULE, "6. INVALID VALUES", REPORT_RULE]
 
     # ---- customer_id ----
     ids = present_values(df, "customer_id")
     id_num = pd.to_numeric(ids, errors="coerce")
     lines.append("  customer_id:")
-    lines.append(f"    non-numeric           : {int(id_num.isna().sum())}")
-    lines.append(f"    <= 0                  : {int((id_num <= 0).sum())}")
+    lines.append(f"    {'non-numeric':<22}: {int(id_num.isna().sum())}")
+    lines.append(f"    {f'< {CUSTOMER_ID_MIN}':<22}: "
+                 f"{int((id_num < CUSTOMER_ID_MIN).sum())}")
 
     # ---- income ----
     inc = present_values(df, "income")
     inc_num = _numeric(inc)
     lines.append("  income:")
-    lines.append(f"    unparseable as number : {int(inc_num.isna().sum())}")
-    lines.append(f"    negative              : {int((inc_num < 0).sum())}")
-    lines.append(f"    > ${INCOME_MAX:,}          : "
+    lines.append(f"    {'unparseable as number':<22}: {int(inc_num.isna().sum())}")
+    lines.append(f"    {'negative':<22}: {int((inc_num < 0).sum())}")
+    lines.append(f"    {f'> ${INCOME_MAX:,.0f}':<22}: "
                  f"{int((inc_num > INCOME_MAX).sum())}")
     for value, count in inc[inc_num.isna()].value_counts().head(5).items():
         lines.append(f"      unparseable e.g. {value!r} x{count}")
 
     # ---- DOB semantics (ISO-parseable subset only) ----
     dob = present_values(df, "date_of_birth")
-    parsed = pd.to_datetime(dob, format="%Y-%m-%d", errors="coerce")
+    parsed = pd.to_datetime(dob, format=DATE_OUTPUT_FORMAT, errors="coerce")
     valid = parsed.dropna()
-    today = pd.Timestamp(date.today())
+    today = pd.Timestamp(TODAY)
+    # "0000-00-00" is a sentinel no parser accepts, hence coerce + dropna.
+    sentinels = pd.to_datetime(sorted(SENTINEL_DATES), format=DATE_OUTPUT_FORMAT,
+                               errors="coerce").dropna()
+    adult_cutoff = today - pd.DateOffset(years=ADULT_AGE_YEARS)
     lines.append("  date_of_birth (semantic, ISO-parseable subset only):")
-    lines.append(f"    ISO-parseable rows       : {len(valid)} of {len(dob)}")
-    lines.append(f"    before 1900 (age > ~150) : "
+    lines.append(f"    {'ISO-parseable rows':<25}: {len(valid)} of {len(dob)}")
+    lines.append(f"    {f'before {DOB_MIN:%Y} (age > {MAX_AGE_YEARS})':<25}: "
                  f"{int((valid < pd.Timestamp(DOB_MIN)).sum())}")
-    lines.append(f"    in the future            : {int((valid > today).sum())}")
-    lines.append(f"    sentinel dates           : "
-                 f"{int(valid.isin(pd.to_datetime(SENTINEL_DATES)).sum())}")
-    lines.append(f"    born after 2006 (minor)  : "
-                 f"{int((valid > pd.Timestamp('2006-12-31')).sum())}")
+    lines.append(f"    {'in the future':<25}: {int((valid > today).sum())}")
+    lines.append(f"    {'sentinel dates':<25}: "
+                 f"{int(valid.isin(sentinels).sum())}")
+    lines.append(f"    {f'under {ADULT_AGE_YEARS} today':<25}: "
+                 f"{int((valid > adult_cutoff).sum())}")
 
     # ---- address length ----
     addr = present_values(df, "address")
     lens = addr.map(len)
     lines.append("  address:")
-    lines.append(f"    < 10 chars            : {int((lens < 10).sum())}")
-    lines.append(f"    > 200 chars           : {int((lens > 200).sum())}")
+    lines.append(f"    {f'< {ADDRESS_MIN_LEN} chars':<22}: "
+                 f"{int((lens < ADDRESS_MIN_LEN).sum())}")
+    lines.append(f"    {f'> {ADDRESS_MAX_LEN} chars':<22}: "
+                 f"{int((lens > ADDRESS_MAX_LEN).sum())}")
 
     # ---- account_status blanks handled in section 7 ----
     return lines
@@ -396,19 +381,35 @@ def profile_invalid(df: pd.DataFrame) -> list[str]:
 # --------------------------------------------------------------------------- #
 
 def profile_categorical(df: pd.DataFrame) -> list[str]:
-    lines = ["", "-" * 74, "7. CATEGORICAL VALIDITY: account_status", "-" * 74]
+    lines = ["", REPORT_RULE, "7. CATEGORICAL VALIDITY: account_status", REPORT_RULE]
     vals = present_values(df, "account_status")
     counts = vals.value_counts()
+    keys = vals.str.lower()
+
     exact = int(vals.isin(VALID_STATUSES).sum())
-    ci = int(vals.str.lower().isin(VALID_STATUSES).sum())
-    lines.append(f"  exact match (already clean) : {exact}")
-    lines.append(f"  valid case-insensitively    : {ci}")
-    lines.append(f"  recoverable by lowercasing  : {ci - exact}")
-    lines.append(f"  invalid / unmappable        : {len(vals) - ci}")
-    lines.append(f"  distinct raw values         : {len(counts)}")
+    ci = int(keys.isin(VALID_STATUSES).sum())
+    mappable = int(keys.isin(STATUS_CANONICAL_MAP).sum())
+    unmappable = int(keys.isin(STATUS_UNMAPPABLE).sum())
+    unknown = len(vals) - mappable - unmappable
+
+    lines.append(f"  exact match (already clean)  : {exact}")
+    lines.append(f"  valid case-insensitively     : {ci}")
+    lines.append(f"  recoverable by lowercasing   : {ci - exact}")
+    lines.append(f"  recoverable via canonical map: {mappable - ci}")
+    lines.append(f"  known but unmappable         : {unmappable}")
+    lines.append(f"  unrecognised entirely        : {unknown}")
+    lines.append(f"  distinct raw values          : {len(counts)}")
     lines.append("  raw value counts:")
     for value, count in counts.items():
-        flag = "" if value.lower() in VALID_STATUSES else "   <-- INVALID"
+        key = value.lower()
+        if key in VALID_STATUSES:
+            flag = ""
+        elif key in STATUS_CANONICAL_MAP:
+            flag = f"   -> {STATUS_CANONICAL_MAP[key]}"
+        elif key in STATUS_UNMAPPABLE:
+            flag = f"   <-- UNMAPPABLE ({STATUS_UNMAPPABLE[key]})"
+        else:
+            flag = "   <-- UNRECOGNISED"
         lines.append(f"    {value!r:<20} {count:>5}{flag}")
     return lines
 
@@ -418,19 +419,20 @@ def profile_categorical(df: pd.DataFrame) -> list[str]:
 # --------------------------------------------------------------------------- #
 
 def profile_cross_field(df: pd.DataFrame) -> list[str]:
-    lines = ["", "-" * 74, "8. CROSS-FIELD ANOMALIES", "-" * 74]
+    lines = ["", REPORT_RULE, "8. CROSS-FIELD ANOMALIES", REPORT_RULE]
 
     created = pd.to_datetime(df["created_date"].map(clean_ws).str.slice(0, 10),
-                             format="%Y-%m-%d", errors="coerce")
+                             format=DATE_OUTPUT_FORMAT, errors="coerce")
     dob = pd.to_datetime(df["date_of_birth"].map(clean_ws).str.slice(0, 10),
-                         format="%Y-%m-%d", errors="coerce")
+                         format=DATE_OUTPUT_FORMAT, errors="coerce")
 
     both = created.notna() & dob.notna()
     lines.append(f"  comparable row pairs (both dates ISO): {int(both.sum())}")
     lines.append(f"  created_date before date_of_birth : "
                  f"{int((both & (created < dob)).sum())}")
-    lines.append(f"  under 18 at account creation      : "
-                 f"{int((both & ((created - dob).dt.days < 18 * 365.25)).sum())}")
+    minor_days = ADULT_AGE_YEARS * 365.25
+    lines.append(f"  under {ADULT_AGE_YEARS} at account creation      : "
+                 f"{int((both & ((created - dob).dt.days < minor_days)).sum())}")
 
     income_num = _numeric(df["income"].map(clean_ws))
     status = df["account_status"].map(clean_ws).str.lower()
@@ -457,21 +459,21 @@ def profile_cross_field(df: pd.DataFrame) -> list[str]:
 # --------------------------------------------------------------------------- #
 
 def run(input_path: Path = RAW_PATH,
-        report_path: Path = REPORT_PATH) -> Path:
+        report_path: Path = QUALITY_REPORT_PATH) -> Path:
     report_path.parent.mkdir(parents=True, exist_ok=True)
 
     df, notes = load_raw(input_path)
     n = len(df)
 
     out: list[str] = []
-    out.append("=" * 74)
+    out.append(REPORT_BORDER)
     out.append("DATA QUALITY REPORT - customers_raw.csv")
     out.append(f"Generated: {datetime.now():%Y-%m-%d %H:%M:%S}")
     out.append(f"Rows loaded: {n}   Expected schema: {len(SCHEMA)} columns")
-    out.append("=" * 74)
+    out.append(REPORT_BORDER)
 
     # ---- Section 1 ----
-    out += ["", "-" * 74, "1. FILE-LEVEL INTEGRITY", "-" * 74]
+    out += ["", REPORT_RULE, "1. FILE-LEVEL INTEGRITY", REPORT_RULE]
     out.append(f"  BOM on header              : "
                f"{'YES' if notes['has_bom'] else 'no'}")
     out.append(f"  line endings               : "
@@ -500,12 +502,12 @@ def run(input_path: Path = RAW_PATH,
     out += profile_cross_field(df)
 
     # ---- Section 9: priority summary ----
-    out += ["", "-" * 74, "9. PRIORITY SUMMARY", "-" * 74]
+    out += ["", REPORT_RULE, "9. PRIORITY SUMMARY", REPORT_RULE]
 
     ids = present_values(df, "customer_id")
     id_dups = int((ids.value_counts() > 1).sum())
-    status_vals = present_values(df, "account_status")
-    bad_status = int((~status_vals.str.lower().isin(VALID_STATUSES)).sum())
+    status_vals = present_values(df, "account_status").str.lower()
+    bad_status = int((~status_vals.isin(STATUS_CANONICAL_MAP)).sum())
 
     if id_dups:
         out.append(f"  [HIGH]   customer_id not unique - {id_dups} repeated "
@@ -515,15 +517,15 @@ def run(input_path: Path = RAW_PATH,
         out.append(f"  [{sev}] '{row['column']}' {row['missing_pct']:.1f}% "
                    f"missing ({int(row['missing'])} rows)")
     if bad_status:
-        out.append(f"  [HIGH]   account_status has {bad_status} values outside "
-                   f"the allowed set")
+        out.append(f"  [HIGH]   account_status has {bad_status} values no "
+                   f"canonical mapping can recover; needs data-owner review")
     out += [
         "  [MEDIUM] non-standard date/phone formats require normalization",
         "  [MEDIUM] PII present in all rows (see pii_detection_report.txt)",
         "  [LOW]    file artifacts (BOM, line endings) - handled at load time",
         "",
         "END OF REPORT",
-        "=" * 74,
+        REPORT_BORDER,
     ]
 
     report_path.write_text("\n".join(out), encoding="utf-8")
