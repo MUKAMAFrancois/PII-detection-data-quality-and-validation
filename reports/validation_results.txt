@@ -1,0 +1,139 @@
+==========================================================================
+VALIDATION RESULTS - customers_raw.csv (pre-cleaning)
+Generated: 2026-09-05 16:01:41
+Source: customers_raw.csv   Rows validated: 2998
+Engine: Pydantic v2 (row rules) + pandas (uniqueness)
+==========================================================================
+
+--------------------------------------------------------------------------
+1. RULES ENFORCED
+--------------------------------------------------------------------------
+  customer_id      integer, unique, positive
+  first_name       non-empty, 2-50 chars, alphabetic
+  last_name        non-empty, 2-50 chars, alphabetic
+  email            valid email format
+  phone            XXX-XXX-XXXX
+  date_of_birth    YYYY-MM-DD, 1900-01-01 to today
+  address          non-empty, 10-200 chars
+  income           numeric, 0 to 10,000,000
+  account_status   active | inactive | suspended
+  created_date     YYYY-MM-DD, 2015-01-01 to today
+
+  Required (non-empty): customer_id, first_name, last_name, address
+  Elsewhere a missing value is reported as a gap, not a
+  rule violation, matching the brief's wording.
+  The brief sets no format rule for income, so currency
+  symbols and thousands separators parse rather than fail;
+  normalizing them is the cleaner's job.
+
+--------------------------------------------------------------------------
+2. SUMMARY
+--------------------------------------------------------------------------
+  rows validated      : 2998
+  rows passing all    : 2153 (71.8%)
+  rows with >=1 fail  : 845 (28.2%)
+  total failures      : 1011
+  auto-fixable        : 395
+  need source data    : 616
+
+--------------------------------------------------------------------------
+3. FAILURES BY COLUMN
+--------------------------------------------------------------------------
+  column            failures   missing
+  customer_id            176        55
+  first_name              72        46
+  last_name               72        52
+  email                   95        40
+  phone                   76        50
+  date_of_birth           65        43
+  address                 89        55
+  income                  37        34
+  account_status          45        53
+  created_date           284        45
+
+--------------------------------------------------------------------------
+4. FAILURES BY RULE
+--------------------------------------------------------------------------
+  column           rule                     count  fixable
+  created_date     not_iso_date               261      245
+  email            invalid_email_format        95        8
+  phone            invalid_phone_format        76       48
+  address          missing_required            55        0
+  customer_id      missing_required            55        0
+  customer_id      not_integer                 54       30
+  last_name        missing_required            52        0
+  date_of_birth    not_iso_date                50       30
+  first_name       missing_required            46        0
+  account_status   invalid_category            45       25
+  customer_id      not_unique                  44        0
+  address          length_out_of_range         34        0
+  created_date     out_of_range                23        0
+  customer_id      not_positive                23        0
+  first_name       not_alphabetic              22        0
+  income           not_numeric                 19        9
+  last_name        not_alphabetic              17        0
+  date_of_birth    sentinel_date                9        0
+  income           negative                     9        0
+  income           exceeds_max                  9        0
+  date_of_birth    out_of_range                 6        0
+  first_name       length_out_of_range          4        0
+  last_name        length_out_of_range          3        0
+
+--------------------------------------------------------------------------
+5. ROW-LEVEL FAILURES
+--------------------------------------------------------------------------
+     row customer_id    column          rule                   value / reason
+       9 1010           created_date    not_iso_date           '2021-03-15 09:00:00'
+      12 1013           created_date    not_iso_date           '2021-03-15 09:00:00'
+      17 1018           first_name      missing_required       'NA'  [needs source]
+      17 1018           created_date    not_iso_date           '2021-03-15 09:00:00'
+      20 1021           address         missing_required       'N/A'  [needs source]
+      21 1022           email           invalid_email_format   g********@gmail  [needs source]
+      25 1026           date_of_birth   sentinel_date          '9999-12-31'  [needs source]
+      28 1029           first_name      not_alphabetic         J****  [needs source]
+      32 1033           created_date    not_iso_date           '2021-03-15 09:00:00'
+      37 1038           email           invalid_email_format   d********  [needs source]
+      39 1040           phone           invalid_phone_format   5********  [needs source]
+      45 1046           last_name       not_alphabetic         S********  [needs source]
+      45 1046           created_date    not_iso_date           '2021-03-15 09:00:00'
+      60 1061           created_date    not_iso_date           '2015-11-21 04:35:10'
+      64 1065           created_date    not_iso_date           '2021-03-15 09:00:00'
+      65 1066           address         length_out_of_range    5*****  [needs source]
+      66 1067           phone           invalid_phone_format   ***-***-1858
+      73 1074           income          not_numeric            '24460-34460'  [needs source]
+      74 1075           created_date    not_iso_date           '2022-01-21T14:32:10+02:00'
+      80 1081           address         missing_required       'N/A'  [needs source]
+      84 1085           first_name      missing_required       'NaN'  [needs source]
+      90 1091           created_date    not_iso_date           '2021-03-15 09:00:00'
+      92 1093           date_of_birth   not_iso_date           '1985-02-30'  [needs source]
+      94 1095           created_date    not_iso_date           '2021-03-15 09:00:00'
+      97 AB-2524        customer_id     not_integer            'AB-2524'  [needs source]
+     107 1108           first_name      not_alphabetic         J*****  [needs source]
+     107 1108           email           invalid_email_format   j********@gmail.com  [needs source]
+     110 1.111E+00      customer_id     not_integer            '1.111E+00'
+     111 1112           created_date    not_iso_date           '2021-03-15 09:00:00'
+     116 1117           first_name      missing_required       'None'  [needs source]
+     122 1123           phone           invalid_phone_format   ***-***-2848
+     138 1139           address         length_out_of_range    4******  [needs source]
+     149 1150           first_name      missing_required       'None'  [needs source]
+     151 1152           created_date    not_iso_date           '2021-03-15 09:00:00'
+     154 1155           created_date    not_iso_date           '2021-03-15 09:00:00'
+     162 1163           created_date    not_iso_date           '2021-03-15 09:00:00'
+     174 1175           created_date    not_iso_date           '2021-03-15 09:00:00'
+     175 1176           first_name      missing_required       'TBD'  [needs source]
+     178 1179           email           invalid_email_format   m********@@gmail.com  [needs source]
+     182 1183           phone           invalid_phone_format   ***-***-8859
+  ... 971 further failures not listed
+
+  Values for first_name, last_name, email, phone, address are redacted;
+  locate the record by row number or customer_id.
+
+--------------------------------------------------------------------------
+6. VERDICT
+--------------------------------------------------------------------------
+  failure rate: 28.2%
+  The 30% gate applies to cleaned output and is not scored here.
+  395 of 1011 failures are auto-fixable; the rest need the source system.
+
+END OF REPORT
+==========================================================================
