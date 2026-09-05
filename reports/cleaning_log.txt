@@ -1,0 +1,181 @@
+==========================================================================
+CLEANING LOG - customers_raw.csv -> customers_cleaned.csv
+Generated: 2026-09-05 18:13:35
+==========================================================================
+
+--------------------------------------------------------------------------
+1. ROW ACCOUNTING
+--------------------------------------------------------------------------
+  rows read        : 2998
+  rows written     : 2943
+  dropped (no key) : 55
+  quarantined      : 0 (>= 5 failures)
+  cells changed    : 1434
+  Dropped and quarantined rows are written to customers_quarantined.csv,
+  never discarded.
+
+--------------------------------------------------------------------------
+2. ACTIONS BY COLUMN
+--------------------------------------------------------------------------
+  column            normalized   nulled  unfixable  missing
+  customer_id               29        0         40       55
+  first_name                64        0         22       46
+  last_name                 80        0         17       52
+  email                     43        0         81       40
+  phone                     48        7         28       50
+  date_of_birth             34       25          0       43
+  address                   19        0          0       55
+  income                    68       14          0       34
+  account_status            61        0         20       53
+  created_date             251       10          0       45
+
+--------------------------------------------------------------------------
+3. NORMALIZATION
+--------------------------------------------------------------------------
+  customer_id
+    leading zeros                          15
+    float round-trip                       14
+  first_name
+    title case                             43
+    whitespace trimmed                     21
+  last_name
+    title case                             51
+    whitespace trimmed                     29
+  email
+    lowercase/trim                         43
+  phone
+    reformatted                            47
+    extension dropped                       1
+  date_of_birth
+    format converted                       32
+    time component dropped                  2
+  address
+    whitespace collapsed                   19
+  income
+    numeric format                         68
+  account_status
+    canonicalised                          61
+  created_date
+    time component dropped                227
+    format converted                       24
+
+--------------------------------------------------------------------------
+4. VALUES REMOVED
+--------------------------------------------------------------------------
+  Removed because the value carried no information, not
+  because it was inconvenient. Each becomes a visible gap.
+  phone
+    placeholder number                      7
+  date_of_birth
+    unparseable as a date                  16
+    sentinel date                           9
+  income
+    range, no single value                  8
+    sentinel amount                         4
+    unparseable as a number                 2
+  created_date
+    unparseable as a date                  10
+
+--------------------------------------------------------------------------
+5. LEFT FOR THE DATA OWNER
+--------------------------------------------------------------------------
+  Kept as-is and still failing validation; repairing these
+  would mean inventing data.
+  customer_id
+    not numeric                            24
+    scientific notation, value not recoverable     16
+  first_name
+    not alphabetic                         22
+  last_name
+    not alphabetic                         17
+  email
+    malformed                              75
+    multiple addresses                      6
+  phone
+    letters in number                       8
+    7 digits, expected 10                   7
+    11 digits, expected 10                  5
+    international                           4
+    9 digits, expected 10                   4
+  account_status
+    no canonical mapping                   20
+
+--------------------------------------------------------------------------
+6. MISSING-VALUE STRATEGY
+--------------------------------------------------------------------------
+  column           strategy        gaps filled
+  customer_id      drop_row                  0
+  first_name       placeholder              46
+  last_name        placeholder              52
+  email            flag_only                 0
+  phone            flag_only                 0
+  date_of_birth    flag_only                 0
+  address          flag_only                 0
+  income           flag_only                 0
+  account_status   placeholder              53
+  created_date     flag_only                 0
+
+  Placeholder is '[MISSING]' ('unknown' for account_status). Both are null
+  sentinels, so a filled gap stays visible as a gap rather
+  than passing validation as real data. Nothing is imputed.
+
+--------------------------------------------------------------------------
+7. VALIDATION: BEFORE vs AFTER
+--------------------------------------------------------------------------
+  metric                         before      after
+  rows                             2998       2943
+  rows failing                      845        438
+  total failures                   1011        508
+  pass rate                       71.8%      85.1%
+
+  by column:
+  column             before    after    fixed
+  customer_id           176      107       69
+  first_name             72       70        2
+  last_name              72       71        1
+  email                  95       79       16
+  phone                  76       28       48
+  date_of_birth          65        7       58
+  address                89       88        1
+  income                 37       19       18
+  account_status         45       18       27
+  created_date          284       21      263
+
+--------------------------------------------------------------------------
+8. SAMPLE CHANGES
+--------------------------------------------------------------------------
+  created_date    '2021-03-15 09:00:00' -> '2021-03-15'
+    time component dropped
+  account_status  'ACTIVE' -> 'active'
+    canonicalised
+  date_of_birth   '9999-12-31' -> <removed>
+    sentinel date
+  last_name       '  Aaaaaaa ' -> 'Aaaaaaa'
+    whitespace trimmed
+  phone           '###.###.####' -> '###-###-####'
+    reformatted
+  income          '24460-34460' -> <removed>
+    range, no single value
+  date_of_birth   '1985-02-30' -> <removed>
+    unparseable as a date
+  first_name      'Aaaaa\xa0' -> 'Aaaaa'
+    whitespace trimmed
+  last_name       'AAAAA' -> 'Aaaaa'
+    title case
+  first_name      'AAAAAA' -> 'Aaaaaa'
+    title case
+  income          ' 242883.31 ' -> '242883.31'
+    numeric format
+  date_of_birth   '2005-12-15 00:00:00' -> '2005-12-15'
+    time component dropped
+  date_of_birth   '03/18/1992' -> '1992-03-18'
+    format converted
+  customer_id     '0001269' -> '1269'
+    leading zeros
+  email           'aaaaa.aaaaa\u200b@aaaaaaa.aaa' -> 'aaaaa.aaaaa@aaaaaaa.aaa'
+    lowercase/trim
+  address         '#### Aaaa ' -> '#### Aaaa'
+    whitespace collapsed
+
+END OF LOG
+==========================================================================

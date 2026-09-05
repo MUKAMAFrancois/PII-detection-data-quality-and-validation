@@ -94,9 +94,11 @@ SOFT_UNIQUE_COLUMNS = ["email", "phone"]
 # --------------------------------------------------------------------------- #
 
 # All counted as missing; treating only "" as missing understates the gap.
+# "[missing]" is our own placeholder (see section 12) and belongs here so a
+# filled gap keeps reading as absent downstream.
 NULL_SENTINELS = {
     "", "null", "none", "nan", "na", "n/a", "#n/a", "-",
-    "--", "?", "tbd", "unknown", "not provided",
+    "--", "?", "tbd", "unknown", "not provided", "[missing]",
 }
 
 # Codepoints, not literals: an invisible character in source is unreviewable.
@@ -394,7 +396,9 @@ MISSING_VALUE_STRATEGY = {
     "created_date": "flag_only",
 }
 
-MISSING_PLACEHOLDER = "UNKNOWN"
+# Distinct from the source's own "Unknown" so a filled gap is never mistaken
+# for a value the upstream system actually supplied.
+MISSING_PLACEHOLDER = "[MISSING]"
 STATUS_PLACEHOLDER = "unknown"       # outside VALID_STATUSES, by design
 
 QUARANTINE_THRESHOLD = 5             # rule failures before a row is quarantined

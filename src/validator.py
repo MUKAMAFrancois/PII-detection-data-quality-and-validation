@@ -336,7 +336,12 @@ def recoverable(column: str, rule: str, raw: str) -> bool:
                 "not_positive", "not_unique"):
         return False
     if column == "customer_id":
-        return bool(re.fullmatch(r"-?\d+\.0+|0*\d+|\d\.\d+E\+?\d+", v, re.I))
+        # Recoverable only if it really is a whole number in disguise:
+        # "1042.0" and "0001042" are, "1.042E+00" is not.
+        try:
+            return float(v).is_integer()
+        except ValueError:
+            return False
     if column in ("first_name", "last_name"):
         return NAME_RE.fullmatch(v) is not None
     if column == "email":

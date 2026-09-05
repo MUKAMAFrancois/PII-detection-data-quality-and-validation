@@ -1,0 +1,56 @@
+customer_id,first_name,last_name,email,phone,date_of_birth,address,income,account_status,created_date
+null,John,Williams,john.williams@company.co.uk,942-390-4127,1942-02-15,"932 Elm Boulevard, Riverside",157101.16,suspended,2017-01-26
+-,Emma,Brown,emma.brown+newsletter@gmail.com,706-221-3677,1957-02-03,"4362 Cedar Lane, Apt 28, Salem",156019.45,inactive,2017-02-14
+null,Sarah,Smith,?,688-571-6637,2006-10-08,"7975 Cedar Lane, Clinton",204090.57,null,1990-01-01
+   ,O'Brien,Miller,obrien.miller@outlook.com,896-489-5757,1959-02-01,"8362 Cedar Lane, Springfield",85650.01,active,2023-02-17
+Unknown,Aline,de la Cruz,aline.de.la.cruz@mail.company.co.uk,583-344-3276,10/30/1977,"3149 Oak Avenue, Greenville",210155.91,actiive,2018-08-14
+Unknown,David,Müller,david.muller@yahoo.com,583-406-5971,1956-05-05,"4416 Oak Avenue, Salem",98128.38,inactive,2022-12-14
+?,Nadia,O'Brien,nadia.obrien@outlook.com,583-623-6363,1958-01-31,"4199 Pine Road, Greenville",167858.72,inactive,2022-04-22
+   ,Michael,van der Berg,michael.van.der.berg+newsletter@gmail.com,615-654-1751,1993-01-03,"4057 Oak Avenue, Apt 42, Clinton",179663.90,active,2023-03-04
+-,Müller,Habimana,muller.habimana@yahoo.com,443-160-7040,1999-10-30,"8648 Cedar Lane, Clinton",150907.95,suspended,2016-05-25
+NaN,D'Arcy,van der Berg,darcy.van.der.berg@gmail.com,376-143-4186,473990400,"9797 Lake Shore Drive, Apt 34, Fairview",165137.17,active,2019-12-04
+#N/A,THOMAS,Smith,thomas.smith+newsletter@gmail.com,787-904-5116,1969-05-10,"3720 Maple Drive, Salem",218323.06,active,2021-03-15 09:00:00
+n/a,N/A Name,Johnson,n/a.name.johnson@mail.company.co.uk,991-838-0199,1991-12-10,"4546 Pine Road, Franklin",134023.34,inactive,2021-02-01
+   ,Ngũgĩ,Moore,ngugi.moore@mail.company.co.uk,248-100-3487,1970-12-11,"6608 Oak Avenue, Apt 2, Clinton",238324.16,active,2023-08-09
+Not Provided,Grace,Williams,grace.williams@company.co.uk,861-986-5163,1961-10-31,"693 Main Street, Apt 7, Clinton","$183,537",active,2023-01-06
+-,Müller,Wilson,muller.wilson+newsletter@gmail.com,527-905-8519,2002-06-21,"4530 Oak Avenue, Fairview",54554.09,active,2019-01-16
+NA,Emma,Anderson,emma.anderson@yahoo.com,566-720-9683,null,"640 Cedar Lane, Salem",224128.11,active,2018-11-22
+#N/A,Samuel,Anderson,samuel.anderson@yahoo.com,492-912-5638,1959-06-27,"3840 Oak Avenue, Fairview",198732.39,inactive,2018-04-01
+None,Peter,Johnson,Unknown,861-486-8531,1984-05-08,"561 Elm Boulevard, Bristol",89308.97,inactive,2022-04-10
+-,John,van der Berg,john.van.der.berg@company.co.uk,n/a,1973-12-30,"9789 Maple Drive, Fairview",111295.26,active,2024-09-01
+Unknown,Thomas,Davis,n/a,274-420-0680,1944-11-28,"9214 Washington Blvd, Clinton",123236.10,active,2022-10-08
+TBD,Nadia,D'Angelo,nadia.dangelo@mail.company.co.uk,602-768-7586,1949-05-03,"5977 Cedar Lane, Franklin",142614.51,TRUE,2021-06-25
+Not Provided,Aline,Jackson,.aline.jackson@x.com,617-730-9390,1977-04-17,"3198 Oak Avenue, Clinton",52552.35,active,2023-11-23
+TBD,José,Johnson,jose.johnson@yahoo.com,457-134-3349,1940-12-31,"3131 Elm Boulevard, Greenville",223500.81,suspended,2021-03-15 09:00:00
+None,Grace,Miller,grace.miller@outlook.com,749-534-7225,1980-03-17,"486 Cedar Lane, Franklin",248321.00,suspended,2021-01-01
+NA,Chloe,Johnson,chloe.johnson@yahoo.com,420-501-4375,1958-11-11,"9232 Washington Blvd, Riverside",245436.16,suspended,2022-01-21
+NULL,Nadia,Smith,nadia.smith@mail.company.co.uk,585-989-5615,1959-01-26,"2854 Cedar Lane, Apt 17, Bristol",199277.12,inactive,2015-10-25
+N/A,Thomas,de la Cruz,thomas.de.la.cruz@yahoo.com,462-872-2773,1960-12-24,"2796 Maple Drive, Springfield",176155.82,inactive,1990-01-01
+NA,David,van der Berg,david.van.der.berg@outlook.com,359-997-8623,1988-04-18,"4189 Lake Shore Drive, Springfield",194091.73,inactive,2016-05-26
+#N/A,Sarah,Anderson,sarah.anderson+newsletter@gmail.com,963-189-6313,2015-06-01,"2908 Lake Shore Drive, Clinton",182233.18,active,2023-01-01
+Not Provided,NaN,O'Brien,nan.obrien@outlook.com,622-242-1099,1957-12-06,"1050 Oak Avenue, Riverside",33471.49,FALSE,2019-10-03
+Not Provided,Thomas,Thomas,thomas.thomas@outlook.com,913-569-2576,1994-07-02,"4819 Elm Boulevard, Riverside",108445.23,active,2023-02-30
+NA,John,Smith,john.smith@outlook.com,695-287-4471,1955-08-27,"4801 Washington Blvd, Fairview",84891.59,active,2018-11-15
+Unknown,Chloe,Taylor,chloe.taylor@gmail.com,861-610-5176,1993-07-15,"581 Main Street, Apt 17, Riverside",33433.00,inactive,2021-01-16
+-,Michael,Habimana,michael.habimana@outlook.com,762-650-8167,1993-10-13,"9191 Lake Shore Drive, Clinton",76177.41,inactive,2021-03-15 09:00:00
+#N/A,D'Arcy,Thomas,darcy.thomas+newsletter@gmail.com,359-457-1452,1950-08-21,"3138 Oak Avenue, Fairview",151077.24,suspended,2019-10-26
+   ,David,Davis,david.davis@outlook.com,462-792-4404,1951-10-19,"6335 Oak Avenue, Greenville",174277.49,active,2019-11-07
+   ,Aline,Moore,aline.moore@yahoo.com,314-770-1325,1983-12-20,"9514 Maple Drive, Apt 45, Salem",145421.03,active,2020-04-29
+N/A,Jane,Smith,jane.smith+newsletter@gmail.com,733-117-1298,1957-12-29,"4493 Elm Boulevard, Greenville",61067.00,active,2018-11-10
+NULL,O'Brien,Thomas,obrien.thomas@gmail.com,837-791-5983,1952-06-02,"6166 Elm Boulevard, Clinton",221232.08,inactive,2020-05-23
+Unknown,Aline,van der Berg,aline.van.der.berg@mail.company.co.uk,974-246-4820,1955-04-25,"5899 Washington Blvd, Bristol",157007.77,inactive,2020-05-29
+None,Nadia,Wilson,nadia.wilson@company.co.uk,218-617-1828,1953-06-19,"7545 Pine Road, Springfield",107410.22,suspended,2023-03-13
+Not Provided,Jane,Williams,jane.williams@outlook.com,000-000-0000,1948-06-19,"1289 Cedar Lane, Apt 6, Franklin",85709.78,inactive,2018-06-20
+N/A,XXX,Uwase,xxx.uwase@gmail.com,954-980-9111,1991-10-13,"1425 Main Street, Salem",99845.71,active,2018-08-10
+-,José,D'Angelo,jose.dangelo@outlook.com,606-599-2032,1979-06-17,"2595 Cedar Lane, Clinton",62479.34,suspended,2021-12-02
+TBD,David,Brown,david.brown@outlook.com,400-750-5660,1984-01-22,"3467 Main Street, Franklin",153057.78,active,2023-13-45
+Not Provided,Daniel,Williams,daniel.williams@yahoo.com,770-635-3327,1964-01-14,"1108 Cedar Lane, Riverside",25679.80,inactive,2020-03-29
+--,D'Arcy,?,darcy.?@yahoo.com,638-580-7214,1995-07-05,"7946 Elm Boulevard, Apt 21, Springfield",110671.47,inactive,2019-07-15
+#N/A,Thomas,de la Cruz,thomas.de.la.cruz@outlook.com,527-265-4403,1981-08-18,"3572 Main Street, Fairview",208879.77,active,2015-04-11
+Unknown,José,Williams,jose.williams@mail.company.co.uk,619-452-6306,1958-09-10,"4217 Elm Boulevard, Bristol",29223.60,active,2016-11-21
+NaN,Michael,Ngũgĩ,michael.ngugi@company.co.uk,919-118-6924,1977-11-27,"8846 Cedar Lane, Salem",177394.44,active,2019-12-05
+N/A,aline,Thomas,aline.thomas@yahoo.com,382-173-1908,1957-12-13,"5540 Lake Shore Drive, Fairview",29209.23,suspended,2021-02-25
+NaN,Thomas,Williams,thomas.williams@outlook.com,970-790-2261,1980-04-10,"359 Main Street, Clinton",110843.38,suspended,2015-12-17
+NULL,Leila,van der Berg,leila.van.der.berg@yahoo.com,984-369-2367,1971-11-15,"4339 Elm Boulevard, Greenville",64512.92,active,2021-03-15 09:00:00
+NULL,Uwase,Emma,emma.uwase@yahoo.com,795-446-8252,05/20/1956,"7423 Pine Road, Franklin",98940.67,active,TBD
+#N/A,Leila,Wilson,leila.wilson+newsletter@gmail.com,439-505-4699,TBD,TBD,78253.48,suspended,2019-04-13
