@@ -73,6 +73,7 @@ from .config import (
     clean_ws,
     dob_bounds,
     is_present,
+    rel,
 )
 from .pii_detector import redact
 from .profiler import load_raw
@@ -538,7 +539,7 @@ def run(input_path: Path = RAW_PATH,
     result = validate_frame(df)
     report = format_report(result, input_path, label, enforce_gate)
     report_path.write_text("\n".join(report), encoding="utf-8")
-    print(f"Report written -> {report_path}")
+    print(f"Report written -> {rel(report_path)}")
     print(f"  {len(result.failed_rows)} of {result.total_rows} rows failed, "
           f"{len(result.failures)} total failures")
     return report_path

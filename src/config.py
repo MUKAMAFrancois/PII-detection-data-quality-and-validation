@@ -53,6 +53,20 @@ def ensure_directories() -> None:
         directory.mkdir(parents=True, exist_ok=True)
 
 
+def rel(path: Path | str) -> str:
+    """Render a path relative to the project root, forward-slashed.
+
+    Absolute paths in logs and reports leak the machine's directory layout
+    and make output differ between checkouts. Falls back to the path as
+    given when it sits outside the project (another drive, say).
+    """
+    candidate = Path(path)
+    try:
+        return candidate.resolve().relative_to(PROJECT_ROOT).as_posix()
+    except ValueError:
+        return candidate.as_posix()
+
+
 # --------------------------------------------------------------------------- #
 # 2. Schema and column roles
 # --------------------------------------------------------------------------- #

@@ -51,6 +51,7 @@ from .config import (
     UNMASKED_PII_COLUMNS,
     clean_ws,
     is_present,
+    rel,
 )
 
 STARS3 = MASK_CHAR * 3
@@ -350,8 +351,8 @@ def run(input_path: Path = CLEANED_PATH,
         "\n".join(format_sample(before, after, counts, leaks, show_raw)),
         encoding="utf-8")
 
-    print(f"Masked CSV    -> {output_path}  ({len(after)} rows)")
-    print(f"Masked sample -> {sample_path}")
+    print(f"Masked CSV    -> {rel(output_path)}  ({len(after)} rows)")
+    print(f"Masked sample -> {rel(sample_path)}")
     print(f"  {sum(counts.values())} cells masked across "
           f"{len(MASKING_RULES)} columns, leaks: {len(leaks)}")
     return output_path

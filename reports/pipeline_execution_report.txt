@@ -1,8 +1,8 @@
 ==========================================================================
 PIPELINE EXECUTION REPORT
-Started : 2026-09-05 18:33:42
-Finished: 2026-09-05 18:33:46   (3.9s)
-Input   : D:\Summer'26\AmaliTech\DEM-11-Data-Governance\pii-detection-data-quality-validation\data\raw\customers_raw.csv
+Started : 2026-09-05 18:40:00
+Finished: 2026-09-05 18:40:03   (3.2s)
+Input   : data/raw/customers_raw.csv
 Status  : SUCCESS
 ==========================================================================
 
@@ -11,12 +11,12 @@ Status  : SUCCESS
 --------------------------------------------------------------------------
   stage            status    seconds  detail
   load             ok           0.01  2998 rows, 5 ragged rows excluded
-  profile          ok           0.46  -> data_quality_report.txt
-  detect_pii       ok           0.71  -> pii_detection_report.txt
-  validate_pre     ok           0.39  845 of 2998 rows failing
-  clean            ok           0.77  2943 rows written
-  validate_post    ok           0.17  438 of 2943 rows failing
-  mask             ok           1.34  2943 rows masked
+  profile          ok           0.38  -> data_quality_report.txt
+  detect_pii       ok           0.61  -> pii_detection_report.txt
+  validate_pre     ok           0.35  845 of 2998 rows failing
+  clean            ok           0.69  2943 rows written
+  validate_post    ok           0.15  438 of 2943 rows failing
+  mask             ok           1.07  2943 rows masked
 
 --------------------------------------------------------------------------
 2. DATA FLOW
@@ -41,25 +41,25 @@ Status  : SUCCESS
 --------------------------------------------------------------------------
 4. OUTPUTS
 --------------------------------------------------------------------------
-  ok           9,774b  reports\data_quality_report.txt
-  ok           7,296b  reports\pii_detection_report.txt
-  ok           8,262b  reports\validation_results.txt
-  ok         383,081b  data\cleaned\customers_cleaned.csv
-  ok           7,422b  reports\cleaning_log.txt
-  ok           7,238b  data\cleaned\customers_quarantined.csv
-  ok         297,819b  data\masked\customers_masked.csv
-  ok           8,138b  reports\masked_sample.txt
+  ok           9,774b  reports/data_quality_report.txt
+  ok           7,296b  reports/pii_detection_report.txt
+  ok           8,262b  reports/validation_results.txt
+  ok         383,081b  data/cleaned/customers_cleaned.csv
+  ok           7,422b  reports/cleaning_log.txt
+  ok           7,238b  data/cleaned/customers_quarantined.csv
+  ok         297,819b  data/masked/customers_masked.csv
+  ok           8,138b  reports/masked_sample.txt
 
 --------------------------------------------------------------------------
 5. DELIVERABLES
 --------------------------------------------------------------------------
-  [x] reports\data_quality_report.txt
-  [x] reports\pii_detection_report.txt
-  [x] reports\validation_results.txt
-  [x] reports\cleaning_log.txt
-  [x] reports\masked_sample.txt
-  [x] reports\pipeline_execution_report.txt   (this file)
-  [x] data\cleaned\customers_cleaned.csv
+  [x] reports/data_quality_report.txt
+  [x] reports/pii_detection_report.txt
+  [x] reports/validation_results.txt
+  [x] reports/cleaning_log.txt
+  [x] reports/masked_sample.txt
+  [x] reports/pipeline_execution_report.txt   (this file)
+  [x] data/cleaned/customers_cleaned.csv
   [ ] reflection.md   <-- not produced
 
 --------------------------------------------------------------------------
@@ -67,7 +67,7 @@ Status  : SUCCESS
 --------------------------------------------------------------------------
   none
 
-  Full log: logs\pipeline.log
+  Full log: logs/pipeline.log
 
 END OF REPORT
 ==========================================================================

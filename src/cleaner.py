@@ -71,6 +71,7 @@ from .config import (
     UNIX_EPOCH,
     clean_ws,
     is_present,
+    rel,
 )
 from .profiler import load_raw
 from .validator import REDACT_COLUMNS, validate_frame
@@ -535,9 +536,9 @@ def run(input_path: Path = RAW_PATH,
     log_path.write_text("\n".join(format_log(report, before, after)),
                         encoding="utf-8")
 
-    print(f"Cleaned CSV   -> {output_path}  ({len(cleaned)} rows)")
-    print(f"Quarantine    -> {quarantine_path}  ({len(rejects)} rows)")
-    print(f"Cleaning log  -> {log_path}")
+    print(f"Cleaned CSV   -> {rel(output_path)}  ({len(cleaned)} rows)")
+    print(f"Quarantine    -> {rel(quarantine_path)}  ({len(rejects)} rows)")
+    print(f"Cleaning log  -> {rel(log_path)}")
     print(f"  failures {len(before.failures)} -> {len(after.failures)}, "
           f"pass rate {100 * before.pass_rate:.1f}% -> "
           f"{100 * after.pass_rate:.1f}%")

@@ -62,6 +62,7 @@ from .config import (
     dob_bounds,
     is_null_sentinel,
     is_present,
+    rel,
 )
 
 DOB_MIN, TODAY = dob_bounds()
@@ -529,7 +530,7 @@ def run(input_path: Path = RAW_PATH,
     ]
 
     report_path.write_text("\n".join(out), encoding="utf-8")
-    print(f"Report written -> {report_path}")
+    print(f"Report written -> {rel(report_path)}")
     return report_path
 
 

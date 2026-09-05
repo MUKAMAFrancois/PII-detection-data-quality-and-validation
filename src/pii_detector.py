@@ -46,6 +46,7 @@ from .config import (
     SSN_SCAN_RE,
     clean_ws,
     is_present,
+    rel,
 )
 from .profiler import load_raw, present_values
 
@@ -371,7 +372,7 @@ def run(input_path: Path = RAW_PATH,
     ]
 
     report_path.write_text("\n".join(out), encoding="utf-8")
-    print(f"Report written -> {report_path}")
+    print(f"Report written -> {rel(report_path)}")
     return report_path
 
 

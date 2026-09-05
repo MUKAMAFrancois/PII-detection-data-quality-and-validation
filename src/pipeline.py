@@ -70,6 +70,7 @@ from .config import (
     REPORT_RULE,
     VALIDATION_REPORT_PATH,
     ensure_directories,
+    rel,
 )
 
 LOGGER_NAME = "pipeline"
@@ -297,7 +298,7 @@ def format_report(run: Run, input_path: Path, succeeded: bool) -> list[str]:
         "PIPELINE EXECUTION REPORT",
         f"Started : {run.started:%Y-%m-%d %H:%M:%S}",
         f"Finished: {finished:%Y-%m-%d %H:%M:%S}   ({elapsed:.1f}s)",
-        f"Input   : {input_path}",
+        f"Input   : {rel(input_path)}",
         f"Status  : {'SUCCESS' if succeeded else 'FAILED'}",
         REPORT_BORDER,
     ]
@@ -362,20 +363,20 @@ def format_report(run: Run, input_path: Path, succeeded: bool) -> list[str]:
             size = path.stat().st_size if path.exists() else 0
             state = "ok" if path.exists() else "MISSING"
             out.append(f"  {state:<8} {size:>9,}b  "
-                       f"{path.relative_to(PROJECT_ROOT)}")
+                       f"{rel(path)}")
 
     # ---- 5. deliverables ----
     out += ["", REPORT_RULE, "5. DELIVERABLES", REPORT_RULE]
     for path in DELIVERABLES:
         if path == PIPELINE_REPORT_PATH:
             # Being written by this very call, so disk state is last run's.
-            out.append(f"  [x] {path.relative_to(PROJECT_ROOT)}   "
+            out.append(f"  [x] {rel(path)}   "
                        f"(this file)")
             continue
         exists = path.exists() and path.stat().st_size > 0
         mark = "[x]" if exists else "[ ]"
         note = "" if exists else "   <-- not produced"
-        out.append(f"  {mark} {path.relative_to(PROJECT_ROOT)}{note}")
+        out.append(f"  {mark} {rel(path)}{note}")
 
     # ---- 6. problems ----
     out += ["", REPORT_RULE, "6. PROBLEMS", REPORT_RULE]
@@ -384,7 +385,8 @@ def format_report(run: Run, input_path: Path, succeeded: bool) -> list[str]:
             out.append(f"  {stage.name}: {stage.error}")
     else:
         out.append("  none")
-    out.append(f"\n  Full log: {LOG_PATH.relative_to(PROJECT_ROOT)}")
+    out.append("")
+    out.append(f"  Full log: {rel(LOG_PATH)}")
 
     out += ["", "END OF REPORT", REPORT_BORDER]
     return out
@@ -400,7 +402,7 @@ def run(input_path: Path = RAW_PATH, quiet: bool = False) -> int:
     run_state = Run()
 
     logger.info("=" * 60)
-    logger.info("pipeline start: input=%s", input_path)
+    logger.info("pipeline start: input=%s", rel(input_path))
 
     succeeded = True
     try:
@@ -418,7 +420,7 @@ def run(input_path: Path = RAW_PATH, quiet: bool = False) -> int:
         PIPELINE_REPORT_PATH.write_text(
             "\n".join(format_report(run_state, input_path, succeeded)),
             encoding="utf-8")
-        logger.info("execution report -> %s", PIPELINE_REPORT_PATH)
+        logger.info("execution report -> %s", rel(PIPELINE_REPORT_PATH))
     except Exception as exc:
         logger.error("could not write execution report: %s", exc)
 
