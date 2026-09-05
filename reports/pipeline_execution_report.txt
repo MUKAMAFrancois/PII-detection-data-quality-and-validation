@@ -1,7 +1,7 @@
 ==========================================================================
 PIPELINE EXECUTION REPORT
-Started : 2026-09-05 18:40:00
-Finished: 2026-09-05 18:40:03   (3.2s)
+Started : 2026-09-05 19:04:05
+Finished: 2026-09-05 19:04:09   (3.9s)
 Input   : data/raw/customers_raw.csv
 Status  : SUCCESS
 ==========================================================================
@@ -11,12 +11,12 @@ Status  : SUCCESS
 --------------------------------------------------------------------------
   stage            status    seconds  detail
   load             ok           0.01  2998 rows, 5 ragged rows excluded
-  profile          ok           0.38  -> data_quality_report.txt
-  detect_pii       ok           0.61  -> pii_detection_report.txt
-  validate_pre     ok           0.35  845 of 2998 rows failing
-  clean            ok           0.69  2943 rows written
-  validate_post    ok           0.15  438 of 2943 rows failing
-  mask             ok           1.07  2943 rows masked
+  profile          ok           0.42  -> data_quality_report.txt
+  detect_pii       ok           0.70  -> pii_detection_report.txt
+  validate_pre     ok           0.44  845 of 2998 rows failing
+  clean            ok           0.84  2943 rows written
+  validate_post    ok           0.18  417 of 2943 rows failing
+  mask             ok           1.30  2943 rows masked
 
 --------------------------------------------------------------------------
 2. DATA FLOW
@@ -32,11 +32,11 @@ Status  : SUCCESS
 3. QUALITY GATE
 --------------------------------------------------------------------------
   metric                     before      after
-  rows failing                  845        438
-  total failures               1011        508
-  pass rate                   71.8%      85.1%
+  rows failing                  845        417
+  total failures               1011        484
+  pass rate                   71.8%      85.8%
 
-  gate: 14.9% failing against a 30% threshold -> PASS
+  gate: 14.2% failing against a 30% threshold -> PASS
 
 --------------------------------------------------------------------------
 4. OUTPUTS
@@ -44,10 +44,10 @@ Status  : SUCCESS
   ok           9,774b  reports/data_quality_report.txt
   ok           7,296b  reports/pii_detection_report.txt
   ok           8,262b  reports/validation_results.txt
-  ok         383,081b  data/cleaned/customers_cleaned.csv
-  ok           7,422b  reports/cleaning_log.txt
+  ok         382,886b  data/cleaned/customers_cleaned.csv
+  ok           7,438b  reports/cleaning_log.txt
   ok           7,238b  data/cleaned/customers_quarantined.csv
-  ok         297,819b  data/masked/customers_masked.csv
+  ok         297,571b  data/masked/customers_masked.csv
   ok           8,138b  reports/masked_sample.txt
 
 --------------------------------------------------------------------------

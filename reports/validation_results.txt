@@ -1,6 +1,6 @@
 ==========================================================================
 VALIDATION RESULTS - customers_raw.csv (pre-cleaning)
-Generated: 2026-09-05 18:40:01
+Generated: 2026-09-05 19:04:07
 Source: customers_raw.csv   Rows validated: 2998
 Engine: Pydantic v2 (row rules) + pandas (uniqueness)
 ==========================================================================
@@ -33,8 +33,8 @@ Engine: Pydantic v2 (row rules) + pandas (uniqueness)
   rows passing all    : 2153 (71.8%)
   rows with >=1 fail  : 845 (28.2%)
   total failures      : 1011
-  auto-fixable        : 379
-  need source data    : 632
+  auto-fixable        : 383
+  need source data    : 628
 
 --------------------------------------------------------------------------
 3. FAILURES BY COLUMN
@@ -62,7 +62,7 @@ Engine: Pydantic v2 (row rules) + pandas (uniqueness)
   customer_id      missing_required            55        0
   customer_id      not_integer                 54       14
   last_name        missing_required            52        0
-  date_of_birth    not_iso_date                50       30
+  date_of_birth    not_iso_date                50       34
   first_name       missing_required            46        0
   account_status   invalid_category            45       25
   customer_id      not_unique                  44        0
@@ -133,7 +133,7 @@ Engine: Pydantic v2 (row rules) + pandas (uniqueness)
 --------------------------------------------------------------------------
   failure rate: 28.2%
   The 30% gate applies to cleaned output and is not scored here.
-  379 of 1011 failures are auto-fixable; the rest need the source system.
+  383 of 1011 failures are auto-fixable; the rest need the source system.
 
 END OF REPORT
 ==========================================================================

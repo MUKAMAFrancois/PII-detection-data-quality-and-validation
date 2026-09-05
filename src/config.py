@@ -242,7 +242,7 @@ PHONE_PLACEHOLDERS = {
     "0000000000", "1111111111", "1234567890", "5555555555", "9999999999",
 }
 
-PHONE_VANITY_RE = re.compile(r"[A-Za-z]")   # 555-CAL-LME: flag, don't decode
+PHONE_VANITY_RE = re.compile(r"[A-Za-z]")   # 555-CAL-LME: remove, never decode
 
 
 # --------------------------------------------------------------------------- #

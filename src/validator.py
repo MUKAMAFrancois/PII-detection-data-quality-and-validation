@@ -148,13 +148,15 @@ def _as_date(value: str) -> date | None:
 
 
 def _parses_any_format(value: str) -> bool:
-    head = re.split(r"[ T]", value)[0]
-    for fmt in DATE_INPUT_FORMATS:
-        try:
-            datetime.strptime(head, fmt)
-            return True
-        except ValueError:
-            continue
+    # Whole value first, then with any time component split off. Splitting up
+    # front would reduce "March 15, 1985" to "March" and call it unrecoverable.
+    for candidate in (value, re.split(r"[ T]", value)[0]):
+        for fmt in DATE_INPUT_FORMATS:
+            try:
+                datetime.strptime(candidate, fmt)
+                return True
+            except ValueError:
+                continue
     return False
 
 

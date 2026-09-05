@@ -38,7 +38,7 @@ customer_id,first_name,last_name,email,phone,date_of_birth,address,income,accoun
 1037,D***,M***,d***@gmail.com,***-***-8617,1941-**-**,[MASKED ADDRESS],177785.58,inactive,2024-08-20
 1038,D***,M***,d***,***-***-1480,1948-**-**,[MASKED ADDRESS],202093.71,inactive,2017-09-27
 1039,E***,W***,e***@yahoo.com,***-***-3804,1962-**-**,[MASKED ADDRESS],237130.37,inactive,2019-10-04
-1040,A***,U***,a***@company.co.uk,***-***-****,1975-**-**,[MASKED ADDRESS],69077.82,active,2021-12-18
+1040,A***,U***,a***@company.co.uk,,1975-**-**,[MASKED ADDRESS],69077.82,active,2021-12-18
 1041,D***,J***,d***@outlook.com,***-***-5352,1955-**-**,[MASKED ADDRESS],236884.14,inactive,2018-10-19
 1042,M***,M***,m***@mail.company.co.uk,***-***-1479,1941-**-**,[MASKED ADDRESS],104540.99,inactive,2017-08-15
 1043,N***,d***,n***@mail.company.co.uk,***-***-6689,1944-**-**,[MASKED ADDRESS],121606.28,suspended,2021-01-21
@@ -251,7 +251,7 @@ AB-2524,N***,B***,n***@gmail.com,***-***-6779,1947-**-**,[MASKED ADDRESS],85765.
 1252,D***,M***,d***@yahoo.com,***-***-5250,1963-**-**,[MASKED ADDRESS],132840.77,inactive,2022-08-10
 1253,L***,W***,l***@gmail.com,***-***-1260,1964-**-**,[MASKED ADDRESS],20332.21,suspended,2021-03-15
 1254,D***,S***,d***@outlook.com,***-***-5346,1999-**-**,[MASKED ADDRESS],0.00,active,2018-03-26
-1255,S***,M***,s***@outlook.com,***-***-2514,,[MASKED ADDRESS],23151.94,inactive,2020-01-11
+1255,S***,M***,s***@outlook.com,***-***-2514,1950-**-**,[MASKED ADDRESS],23151.94,inactive,2020-01-11
 1256,A***,S***,a***@mail.company.co.uk,***-***-0070,1988-**-**,[MASKED ADDRESS],149825.98,suspended,2019-12-16
 1257,J***,D***,j***@gmail.com,***-***-5855,1944-**-**,[MASKED ADDRESS],119682.65,active,2019-06-04
 1258,O***,J***,o***@yahoo.com,***-***-6326,1965-**-**,[MASKED ADDRESS],112668.30,active,2019-10-03
@@ -554,7 +554,7 @@ AB-8617,D***,M***,d***@mail.company.co.uk,***-***-7608,1952-**-**,[MASKED ADDRES
 1561,T***,D***,t***@company.co.uk,***-***-9729,1968-**-**,[MASKED ADDRESS],53281.76,active,2024-09-24
 1562,D***,U***,d***@outlook.com,***-***-0565,1969-**-**,[MASKED ADDRESS],30011.31,active,2016-10-31
 1563,S***,T***,s***@gmail.com,***-***-8596,1975-**-**,[MASKED ADDRESS],219136.29,active,2021-04-03
-1564,J***,T***,j***@yahoo.com,***-***-4849,,[MASKED ADDRESS],,active,2019-02-16
+1564,J***,T***,j***@yahoo.com,,,[MASKED ADDRESS],,active,2019-02-16
 1566,D***,J***,d***@yahoo.com,***-***-4892,2000-**-**,[MASKED ADDRESS],148208.95,inactive,2015-04-08
 1567,E***,W***,e***@outlook.com,***-***-2707,1983-**-**,[MASKED ADDRESS],160530.03,inactive,2018-05-27
 1568,E***,J***,e***@company.co.uk,***-***-4587,1942-**-**,[MASKED ADDRESS],223530.06,active,2022-02-20
@@ -564,7 +564,7 @@ AB-8617,D***,M***,d***@mail.company.co.uk,***-***-7608,1952-**-**,[MASKED ADDRES
 1572,E***,T***,e***@yahoo.com,***-***-2612,1991-**-**,[MASKED ADDRESS],142839.23,unknown,2021-03-04
 1573,G***,T***,g***@outlook.com,***-***-6435,1971-**-**,[MASKED ADDRESS],,suspended,2020-07-21
 1574,A***,U***,a***@mail.company.co.uk,***-***-0265,1956-**-**,[MASKED ADDRESS],99015.86,suspended,2021-03-15
-1575,T***,M***,t***@mail.company.co.uk,***-***-7287,1988-**-**,[MASKED ADDRESS],129550.37,inactive,2016-01-13
+1575,T***,M***,t***@mail.company.co.uk,,1988-**-**,[MASKED ADDRESS],129550.37,inactive,2016-01-13
 1576,D***,D***,d***@company.co.uk,***-***-7392,1976-**-**,[MASKED ADDRESS],178825.80,suspended,2015-07-19
 1577,M***,D***,m***@outlook.com,***-***-2536,1946-**-**,[MASKED ADDRESS],227771.34,active,2017-07-04
 1578,J***,D***,j***@gmail.com,***-***-9915,1979-**-**,[MASKED ADDRESS],22881.16,suspended,2015-09-24
@@ -836,7 +836,7 @@ AB-6783,J***,T***,j***@yahoo.com,***-***-6326,1990-**-**,[MASKED ADDRESS],99151.
 1851,J***,U***,j***@company.co.uk,***-***-2331,2005-**-**,[MASKED ADDRESS],249883.09,suspended,2024-04-14
 -305,J***,T***,j***@gmail.com,***-***-8132,1992-**-**,[MASKED ADDRESS],193052.54,active,2018-12-24
 1853,J***,T***,j***@gmail.com,***-***-5974,1996-**-**,[MASKED ADDRESS],43054.27,active,2022-07-31
-1854,J***,D***,j***@yahoo.com,***-***-2819,1995-**-**,[MASKED ADDRESS],247143.37,inactive,2021-03-15
+1854,J***,D***,j***@yahoo.com,,1995-**-**,[MASKED ADDRESS],247143.37,inactive,2021-03-15
 1855,G***,O***,g***@gmail.com,***-***-0244,2004-**-**,,75369.89,active,2016-07-06
 1856,E***,B***,e***@gmail.com,***-***-6265,1980-**-**,[MASKED ADDRESS],30578.91,active,2024-07-12
 1857,D***,J***,d***@gmail.com,***-***-0072,1940-**-**,[MASKED ADDRESS],64792.11,active,2024-09-15
@@ -976,7 +976,7 @@ AB-4396,M***,U***,m***@gmail.com,***-***-6369,1950-**-**,[MASKED ADDRESS],189070
 1993,L***,D***,l***@gmail.com,***-***-7277,1959-**-**,[MASKED ADDRESS],99062.87,suspended,2020-05-15
 1994,E***,U***,e***@gmail.com,***-***-0149,2000-**-**,[MASKED ADDRESS],22498.79,suspended,2021-03-15
 1995,N***,T***,n***@gmail.com,***-***-6294,1984-**-**,[MASKED ADDRESS],71203.03,active,2021-03-15
-1996,A***,M***,a***@yahoo.com,***-***-****,1994-**-**,[MASKED ADDRESS],51888.96,active,2020-03-15
+1996,A***,M***,a***@yahoo.com,,1994-**-**,[MASKED ADDRESS],51888.96,active,2020-03-15
 1997,S***,M***,s***@company.co.uk,***-***-0081,1951-**-**,[MASKED ADDRESS],25612.05,unknown,2015-07-04
 1998,J***,M***,j***@yahoo.com,***-***-9891,1945-**-**,[MASKED ADDRESS],95020.33,suspended,2020-07-09
 2000,G***,B***,g***@outlook.com,***-***-1710,2000-**-**,[MASKED ADDRESS],56546.86,inactive,2015-04-19
@@ -1003,12 +1003,12 @@ AB-4396,M***,U***,m***@gmail.com,***-***-6369,1950-**-**,[MASKED ADDRESS],189070
 2021,S***,v***,s***@outlook.com,***-***-0718,2003-**-**,[MASKED ADDRESS],109311.54,suspended,2017-12-07
 2022,O***,O***,o***@outlook.com,***-***-3391,1948-**-**,[MASKED ADDRESS],105334.92,suspended,2019-08-20
 2023,A***,M***,a***,***-***-6679,1953-**-**,[MASKED ADDRESS],154177.49,suspended,2016-06-10
-AB-1813,1***,D***,1***@company.co.uk,***-***-6539,1965-**-**,[MASKED ADDRESS],28399.71,suspended,2017-08-18
+AB-1813,1***,D***,1***@company.co.uk,,1965-**-**,[MASKED ADDRESS],28399.71,suspended,2017-08-18
 2025,D***,U***,d***@gmail.com,***-***-0931,1992-**-**,[MASKED ADDRESS],15834.60,suspended,2016-12-11
 2026,G***,T***,g***@yahoo.com,***-***-3770,1963-**-**,[MASKED ADDRESS],55042.52,active,2024-02-03
 2027,D***,W***,d***@outlook.com,***-***-7503,1971-**-**,[MASKED ADDRESS],143892.83,suspended,2024-08-31
 2028,D***,d***,a***@company.co.uk,***-***-5053,1977-**-**,[MASKED ADDRESS],110300.97,inactive,2016-02-07
-2029,D***,O***,d***@yahoo.com,***-***-7496,1997-**-**,[MASKED ADDRESS],135959.96,active,2022-09-18
+2029,D***,O***,d***@yahoo.com,,1997-**-**,[MASKED ADDRESS],135959.96,active,2022-09-18
 2030,M***,T***,m***@gmail.com,***-***-3962,1990-**-**,[MASKED ADDRESS],116951.02,inactive,2015-04-13
 -75,N***,O***,n***@outlook.com,***-***-6349,1989-**-**,[MASKED ADDRESS],97465.94,suspended,2022-04-09
 2032,M***,J***,m***@gmail.com,***-***-4290,2003-**-**,[MASKED ADDRESS],162217.95,active,2015-03-15
@@ -1075,7 +1075,7 @@ AB-1813,1***,D***,1***@company.co.uk,***-***-6539,1965-**-**,[MASKED ADDRESS],28
 2094,S***,D***,s***@yahoo.com,***-***-8179,1997-**-**,[MASKED ADDRESS],78682.66,suspended,
 2095,D***,J***,d***@company.co.uk,,1981-**-**,[MASKED ADDRESS],145777.76,active,2015-12-28
 2096,J***,N***,j***@gmail.com,***-***-8454,1974-**-**,,99273.86,inactive,2024-01-09
-2097,C***,T***,c***@outlook.com,***-***-6845,1996-**-**,[MASKED ADDRESS],232785.33,inactive,2022-10-26
+2097,C***,T***,c***@outlook.com,,1996-**-**,[MASKED ADDRESS],232785.33,inactive,2022-10-26
 2098,O***,W***,o***@gmail.com,***-***-9692,1948-**-**,[MASKED ADDRESS],80117.14,active,2021-11-25
 2099,T***,S***,s***@outlook.com,***-***-9331,1946-**-**,[MASKED ADDRESS],99996.51,active,2021-03-15
 2100,T***,J***,t***@yahoo.com,,1962-**-**,[MASKED ADDRESS],170294.94,active,2022-06-10
@@ -1186,7 +1186,7 @@ AB-1813,1***,D***,1***@company.co.uk,***-***-6539,1965-**-**,[MASKED ADDRESS],28
 2209,S***,M***,s***@yahoo.com,***-***-9782,1996-**-**,[MASKED ADDRESS],39291.47,active,2021-01-25
 2210,D***,A***,d***@yahoo.com,***-***-6057,1970-**-**,[MASKED ADDRESS],132434.76,suspended,2022-07-16
 2211,G***,M***,g***@gmail.com,***-***-0478,2002-**-**,[MASKED ADDRESS],114660.88,active,2022-09-09
-2212,L***,T***,l***@company.co.uk,***-***-6583,2000-**-**,[MASKED ADDRESS],158726.33,suspended,2016-11-01
+2212,L***,T***,l***@company.co.uk,,2000-**-**,[MASKED ADDRESS],158726.33,suspended,2016-11-01
 2213,M***,W***,m***@yahoo.com,***-***-1188,1954-**-**,,67717.86,active,2019-09-08
 2214,D***,D***,d***@company.co.uk,***-***-9169,2005-**-**,[MASKED ADDRESS],177847.84,suspended,2015-04-16
 2215,E***,v***,e***@outlook.com,***-***-8245,1952-**-**,,112984.65,active,2024-12-08
@@ -1309,7 +1309,7 @@ AB-6002,D***,M***,d***@yahoo.com,***-***-9110,1987-**-**,[MASKED ADDRESS],42499.
 2333,N***,D***,n***@gmail.com,***-***-3891,1945-**-**,[MASKED ADDRESS],99345.16,inactive,2024-12-03
 2334,D***,T***,d***@gmail.com,***-***-2569,2000-**-**,[MASKED ADDRESS],218997.25,inactive,2019-01-24
 2335,T***,N***,t***@outlook.com,***-***-8409,1977-**-**,[MASKED ADDRESS],173673.68,suspended,2020-09-30
-2336,S***,T***,s***@yahoo.com,***-***-5675,1979-**-**,[MASKED ADDRESS],196793.65,inactive,2015-11-15
+2336,S***,T***,s***@yahoo.com,,1979-**-**,[MASKED ADDRESS],196793.65,inactive,2015-11-15
 2337,D***,D***,d***@company.co.uk,***-***-8137,1964-**-**,[MASKED ADDRESS],135863.88,inactive,2024-02-09
 2338,J***,S***,j***@gmail.com,***-***-8968,1991-**-**,[MASKED ADDRESS],46154.38,inactive,2022-05-23
 2339,C***,M***,c***,***-***-7319,2005-**-**,[MASKED ADDRESS],130342.48,inactive,2024-01-12
@@ -1329,7 +1329,7 @@ AB-6002,D***,M***,d***@yahoo.com,***-***-9110,1987-**-**,[MASKED ADDRESS],42499.
 2353,M***,J***,m***@company.co.uk,***-***-6001,1943-**-**,[MASKED ADDRESS],82562.67,active,2016-03-27
 2354,D***,S***,d***@gmail.com,***-***-5757,1943-**-**,[MASKED ADDRESS],20210.10,inactive,2018-09-20
 2355,D***,M***,d***@gmail.com,,1971-**-**,[MASKED ADDRESS],239879.14,active,2020-11-10
-2356,O***,M***,o***@yahoo.com,***-***-2309,1964-**-**,[MASKED ADDRESS],207159.38,suspended,2016-08-18
+2356,O***,M***,o***@yahoo.com,,1964-**-**,[MASKED ADDRESS],207159.38,suspended,2016-08-18
 2357,G***,X***,g***@outlook.com,***-***-1808,1952-**-**,[MASKED ADDRESS],22702.63,active,2017-02-18
 2358,G***,H***,g***@outlook.com,***-***-4958,2002-**-**,[MASKED ADDRESS],-4142.00,unknown,2018-01-09
 2359,E***,d***,e***@gmail.com,***-***-9263,1948-**-**,[MASKED ADDRESS],-17173.00,suspended,2022-09-24
@@ -1504,11 +1504,11 @@ AB-5143,P***,M***,p***@mail.company.co.uk,***-***-7475,1960-**-**,[MASKED ADDRES
 2535,C***,M***,c***@yahoo.com,***-***-3795,1966-**-**,[MASKED ADDRESS],73891.58,active,2017-09-08
 2536,A***,M***,a***@outlook.com,***-***-4358,2005-**-**,[MASKED ADDRESS],165532.94,inactive,2022-05-08
 2537,D***,T***,d***@gmail.com,***-***-8374,1999-**-**,[MASKED ADDRESS],124656.75,active,2020-06-02
-2538,M***,v***,m***@gmail.com,***-***-6841,1975-**-**,[MASKED ADDRESS],127532.77,suspended,2019-03-25
+2538,M***,v***,m***@gmail.com,,1975-**-**,[MASKED ADDRESS],127532.77,suspended,2019-03-25
 2539,G***,J***,g***@company.co.uk,***-***-9147,1940-**-**,[MASKED ADDRESS],174419.47,unknown,2021-07-07
 2540,N***,T***,n***@yahoo.com,***-***-9185,1990-**-**,[MASKED ADDRESS],123084.31,suspended,2017-10-14
 2541,P***,N***,p***@gmail.com,***-***-5863,1972-**-**,[MASKED ADDRESS],211620.38,inactive,2015-05-04
-2542,O***,A***,o***@company.co.uk,***-***-5899,2010-**-**,[MASKED ADDRESS],94052.12,inactive,2019-04-26
+2542,O***,A***,o***@company.co.uk,,2010-**-**,[MASKED ADDRESS],94052.12,inactive,2019-04-26
 AB-7577,D***,T***,d***@mail.company.co.uk,***-***-0330,1949-**-**,[MASKED ADDRESS],22448.80,active,2022-09-05
 2544,L***,W***,l***@gmail.com,***-***-2966,1962-**-**,[MASKED ADDRESS],145643.95,inactive,2016-03-28
 2545,J***,O***,j***@gmail.com,***-***-1927,1984-**-**,[MASKED ADDRESS],161762.34,suspended,2016-02-14
@@ -1618,7 +1618,7 @@ AB-7577,D***,T***,d***@mail.company.co.uk,***-***-0330,1949-**-**,[MASKED ADDRES
 2651,J***,N***,n***@outlook.com,***-***-2357,1975-**-**,[MASKED ADDRESS],233944.25,inactive,2018-08-08
 2652,C***,v***,c***@x.com; c***@y.com,***-***-7227,1950-**-**,[MASKED ADDRESS],170436.73,active,2022-11-14
 2653,N***,d***,n***@company.co.uk,***-***-4549,1969-**-**,[MASKED ADDRESS],88929.64,suspended,2015-12-14
-2655,J***,T***,j***@company.co.uk,***-***-0091,,[MASKED ADDRESS],123561.07,active,2021-01-02
+2655,J***,T***,j***@company.co.uk,***-***-0091,1941-**-**,[MASKED ADDRESS],123561.07,active,2021-01-02
 2656,S***,A***,s***@gmail.com,***-***-2204,1977-**-**,[MASKED ADDRESS],247119.00,suspended,2023-11-21
 2657,S***,B***,s***@gmail.com,***-***-0352,1946-**-**,[MASKED ADDRESS],128785.33,suspended,2024-11-05
 2658,S***,M***,s***@yahoo.com,***-***-7730,1972-**-**,[MASKED ADDRESS],154522.87,suspended,2023-07-07
@@ -1809,7 +1809,7 @@ AB-5338,E***,v***,e***@yahoo.com,***-***-3370,1956-**-**,[MASKED ADDRESS],16649.
 2847,S***,D***,s***@outlook.com,***-***-2919,1949-**-**,[MASKED ADDRESS],214079.25,suspended,
 2848,N***,D***,n***@company.co.uk,***-***-0041,1986-**-**,[MASKED ADDRESS],149758.83,inactive,2017-04-21
 2849,J***,N***,j***@company.co.uk,***-***-1485,1987-**-**,[MASKED ADDRESS],28104.42,active,2019-08-24
-2850,M***,D***,m***@gmail.com,***-***-1061,,[MASKED ADDRESS],139908.25,inactive,2021-01-11
+2850,M***,D***,m***@gmail.com,***-***-1061,1977-**-**,[MASKED ADDRESS],139908.25,inactive,2021-01-11
 2851,T***,J***,t***@yahoo.com,***-***-0569,1961-**-**,[MASKED ADDRESS],188095.62,inactive,2023-01-15
 2852,S***,J***,s***@outlook.com,***-***-1665,1956-**-**,[MASKED ADDRESS],135866.17,active,2015-08-13
 2853,P***,J***,p***@mail.company.co.uk,***-***-7939,1966-**-**,,249943.81,inactive,2021-03-15
@@ -1974,7 +1974,7 @@ AB-9589,D***,T***,d***@company.co.uk,***-***-4324,2001-**-**,[MASKED ADDRESS],54
 3014,O***,J***,o***@gmail.com,***-***-3808,,[MASKED ADDRESS],91611.96,inactive,2024-02-28
 3015,J***,W***,j***@outlook.com,***-***-0877,1970-**-**,[MASKED ADDRESS],121195.42,active,2021-03-15
 3017,D***,J***,d***@mail.company.co.uk,***-***-1778,1951-**-**,[MASKED ADDRESS],189406.68,suspended,2024-02-08
-3018,[MISSING],W***,n***@gmail.com,***-***-****,1961-**-**,[MASKED ADDRESS],147031.52,suspended,2021-05-03
+3018,[MISSING],W***,n***@gmail.com,,1961-**-**,[MASKED ADDRESS],147031.52,suspended,2021-05-03
 3019,P***,A***,p***@gmail.com,***-***-6301,1982-**-**,[MASKED ADDRESS],204597.83,inactive,2022-03-10
 3020,J***,T***,j***@gmail.com,***-***-6620,1986-**-**,[MASKED ADDRESS],174641.64,inactive,2015-10-18
 3021,O***,D***,o***@gmail.com,***-***-2406,1995-**-**,[MASKED ADDRESS],129174.38,inactive,
@@ -1986,7 +1986,7 @@ AB-9589,D***,T***,d***@company.co.uk,***-***-4324,2001-**-**,[MASKED ADDRESS],54
 3027,E***,D***,e***@outlook.com,***-***-8304,1950-**-**,[MASKED ADDRESS],198950.01,inactive,2023-10-28
 3028,C***,T***,c***@gmail.com,***-***-2325,1963-**-**,[MASKED ADDRESS],92240.95,active,2017-10-28
 3029,D***,J***,d***@company.co.uk,***-***-7252,1951-**-**,[MASKED ADDRESS],63494.17,unknown,2023-09-23
-3030,L***,N***,l***@company.co.uk,***-***-****,1966-**-**,[MASKED ADDRESS],117693.50,active,2023-11-19
+3030,L***,N***,l***@company.co.uk,,1966-**-**,[MASKED ADDRESS],117693.50,active,2023-11-19
 3031,D***,d***,d***@gmail.com,***-***-2015,1966-**-**,[MASKED ADDRESS],214445.41,inactive,2020-03-06
 3032,D***,J***,d***@yahoo.com,***-***-7606,1953-**-**,[MASKED ADDRESS],187404.17,active,2018-06-03
 3033,A***,A***,a***@gmail.com,***-***-0457,1948-**-**,[MASKED ADDRESS],226293.35,suspended,2017-05-30
@@ -2020,7 +2020,7 @@ AB-8515,D***,W***,d***@yahoo.com,***-***-7299,1974-**-**,[MASKED ADDRESS],70533.
 3061,D***,M***,d***@company.co.uk,***-***-9935,1967-**-**,[MASKED ADDRESS],68653.50,inactive,2017-12-07
 3062,E***,H***,e***@yahoo.com,***-***-9221,1973-**-**,[MASKED ADDRESS],141886.43,suspended,2016-11-05
 3063,J***,T***,j***@company.co.uk,***-***-9302,1984-**-**,[MASKED ADDRESS],31037.63,active,2016-05-08
-3064,M***,A***,m***@outlook.com,***-***-8279,1991-**-**,[MASKED ADDRESS],174190.00,inactive,2017-09-24
+3064,M***,A***,m***@outlook.com,,1991-**-**,[MASKED ADDRESS],174190.00,inactive,2017-09-24
 3065,D***,A***,d***@gmail.com,***-***-2030,1991-**-**,[MASKED ADDRESS],232858.77,suspended,2023-02-28
 3066,O***,J***,o***@gmail.com,***-***-2185,1970-**-**,[MASKED ADDRESS],114130.15,active,2015-09-05
 3067,P***,W***,p***@outlook.com,***-***-2813,1964-**-**,[MASKED ADDRESS],116870.20,active,2024-07-03
@@ -2055,7 +2055,7 @@ AB-8515,D***,W***,d***@yahoo.com,***-***-7299,1974-**-**,[MASKED ADDRESS],70533.
 3097,D***,D***,d***@yahoo.com,***-***-3713,1949-**-**,[MASKED ADDRESS],143377.06,suspended,2024-02-16
 3098,D***,T***,d***@outlook.com,***-***-7323,1980-**-**,[MASKED ADDRESS],95263.99,suspended,2015-08-16
 3099,G***,T***,g***@gmail.com,***-***-5131,1999-**-**,[MASKED ADDRESS],,active,2015-07-16
-3100,N***,B***,n***@yahoo.com,***-***-****,1974-**-**,[MASKED ADDRESS],97415.24,active,2020-10-21
+3100,N***,B***,n***@yahoo.com,,1974-**-**,[MASKED ADDRESS],97415.24,active,2020-10-21
 3101,M***,W***,m***@gmail.com,***-***-9401,1997-**-**,[MASKED ADDRESS],151868.78,inactive,2023-09-09
 3102,D***,J***,d***@company.co.uk,***-***-8478,1963-**-**,[MASKED ADDRESS],216534.93,active,2015-04-06
 3103,L***,A***,l***@outlook.com,***-***-0112,1940-**-**,[MASKED ADDRESS],27398.45,suspended,2017-09-06
@@ -2184,7 +2184,7 @@ AB-8515,D***,W***,d***@yahoo.com,***-***-7299,1974-**-**,[MASKED ADDRESS],70533.
 3230,M***,H***,m***@gmail.com,***-***-7573,1949-**-**,[MASKED ADDRESS],220198.44,suspended,2017-09-03
 3231,L***,S***,l***@gmail.com,***-***-4089,1955-**-**,[MASKED ADDRESS],167815.60,inactive,2016-02-08
 3232,N***,T***,n***@company.co.uk,***-***-0318,1999-**-**,[MASKED ADDRESS],75306.41,suspended,2019-12-10
-3233,S***,U***,s***@mail.company.co.uk,***-***-2309,1941-**-**,[MASKED ADDRESS],48998.30,inactive,2024-04-02
+3233,S***,U***,s***@mail.company.co.uk,,1941-**-**,[MASKED ADDRESS],48998.30,inactive,2024-04-02
 3234,D***,J***,d***@company.co.uk,***-***-4206,,[MASKED ADDRESS],110029.78,suspended,2016-06-20
 3235,J***,M***,j***@company.co.uk,***-***-1686,1953-**-**,[MASKED ADDRESS],99159.39,active,2022-01-21
 3236,T***,N***,t***@yahoo.com,***-***-3111,1963-**-**,[MASKED ADDRESS],62529.57,active,2015-08-24
@@ -2235,7 +2235,7 @@ AB-8515,D***,W***,d***@yahoo.com,***-***-7299,1974-**-**,[MASKED ADDRESS],70533.
 3282,C***,D***,c***@gmail.com,***-***-4252,1987-**-**,[MASKED ADDRESS],109129.28,active,2023-07-24
 3283,N***,T***,n***@mail.company.co.uk,***-***-1399,,[MASKED ADDRESS],51772.35,inactive,2015-10-17
 3284,J***,M***,j***@gmail.com,***-***-2459,1963-**-**,[MASKED ADDRESS],229362.84,inactive,2021-03-15
-3285,A***,D***,a***@mail.company.co.uk,***-***-6499,1974-**-**,[MASKED ADDRESS],43342.76,suspended,2024-09-27
+3285,A***,D***,a***@mail.company.co.uk,,1974-**-**,[MASKED ADDRESS],43342.76,suspended,2024-09-27
 3286,M***,D***,m***@mail.company.co.uk,***-***-8483,1984-**-**,[MASKED ADDRESS],34377.70,inactive,2023-12-13
 3287,N***,H***,n***@gmail.com,***-***-2792,2006-**-**,[MASKED ADDRESS],82711.19,suspended,2021-01-25
 3288,C***,[MISSING],p***@gmail.com,***-***-0762,1946-**-**,[MASKED ADDRESS],113443.42,suspended,1990-01-01
@@ -2331,7 +2331,7 @@ AB-4232,J***,J***,j***@gmail.com,***-***-3735,1997-**-**,,139672.07,suspended,20
 3379,M***,O***,m***@mail.company.co.uk,***-***-1007,1978-**-**,[MASKED ADDRESS],43280.32,inactive,2020-01-09
 3380,M***,M***,m***@outlook.com,***-***-6345,1980-**-**,[MASKED ADDRESS],111207.28,inactive,2015-06-08
 3381,E***,W***,e***@gmail.com,***-***-3351,1972-**-**,[MASKED ADDRESS],192152.65,active,2024-08-26
-3382,G***,B***,g***@company.co.uk,***-***-6748,,[MASKED ADDRESS],248691.63,active,2019-08-13
+3382,G***,B***,g***@company.co.uk,***-***-6748,1940-**-**,[MASKED ADDRESS],248691.63,active,2019-08-13
 3383,O***,O***,o***@yahoo.com,***-***-3806,1978-**-**,[MASKED ADDRESS],217945.77,active,2015-03-17
 3384,[MISSING],S***,s***@mail.company.co.uk,***-***-8200,1948-**-**,,165907.84,inactive,2022-03-11
 3385,N***,B***,n***@company.co.uk,***-***-4275,,[MASKED ADDRESS],84133.02,active,2019-08-20
@@ -2462,7 +2462,7 @@ AB-4232,J***,J***,j***@gmail.com,***-***-3735,1997-**-**,,139672.07,suspended,20
 3512,D***,W***,d***@yahoo.com,***-***-6245,1974-**-**,[MASKED ADDRESS],33393.27,inactive,
 3513,[MISSING],H***,n***@gmail.com,***-***-9764,1963-**-**,[MASKED ADDRESS],84613.91,active,2017-02-12
 3514,G***,d***,g***@outlook.com,***-***-0052,1971-**-**,[MASKED ADDRESS],71108.37,suspended,2024-08-17
-3515,D***,T***,d***@mail.company.co.uk,***-***-2013,1983-**-**,[MASKED ADDRESS],109899.62,active,2021-03-15
+3515,D***,T***,d***@mail.company.co.uk,,1983-**-**,[MASKED ADDRESS],109899.62,active,2021-03-15
 3516,M***,W***,m***@outlook.com,***-***-1301,1965-**-**,[MASKED ADDRESS],246626.71,suspended,2023-11-30
 3517,S***,J***,s***@company.co.uk,***-***-9097,1965-**-**,[MASKED ADDRESS],94246.19,active,2021-08-09
 3518,A***,M***,a***@company.co.uk,***-***-9698,1959-**-**,[MASKED ADDRESS],180314.62,active,2021-07-25
@@ -2582,7 +2582,7 @@ AB-4232,J***,J***,j***@gmail.com,***-***-3735,1997-**-**,,139672.07,suspended,20
 3632,D***,H***,d***@outlook.com,***-***-6451,1973-**-**,[MASKED ADDRESS],106114.98,active,2017-08-08
 3633,P***,M***,p***@x.com; p***@y.com,***-***-2146,1949-**-**,[MASKED ADDRESS],92503.34,active,2018-12-01
 3634,T***,A***,t***@yahoo.com,***-***-2040,1984-**-**,[MASKED ADDRESS],45579.79,suspended,2021-12-09
-3635,L***,W***,l***@company.co.uk,***-***-1815,1966-**-**,[MASKED ADDRESS],113938.73,active,2015-05-21
+3635,L***,W***,l***@company.co.uk,,1966-**-**,[MASKED ADDRESS],113938.73,active,2015-05-21
 3636,D***,d***,d***@gmail.com,***-***-1606,2015-**-**,[MASKED ADDRESS],,inactive,2023-01-01
 3637,D***,J***,d***@yahoo.com,***-***-9428,1958-**-**,[MASKED ADDRESS],43295.03,inactive,2018-07-12
 3638,D***,H***,d***@gmail.com,***-***-2355,2004-**-**,[MASKED ADDRESS],128849.81,inactive,2023-10-19
@@ -2694,7 +2694,7 @@ AB-4232,J***,J***,j***@gmail.com,***-***-3735,1997-**-**,,139672.07,suspended,20
 3745,J***,U***,j***@company.co.uk,***-***-2490,1950-**-**,[MASKED ADDRESS],79686.92,active,2020-04-23
 3746,[MISSING],M***,n***@outlook.com,***-***-0849,1988-**-**,[MASKED ADDRESS],128180.36,inactive,2015-12-10
 3747,M***,v***,m***@outlook.com,***-***-4721,1978-**-**,[MASKED ADDRESS],198808.98,active,2023-06-10
-3748,M***,A***,m***@gmail.com,***-***-8779,1948-**-**,[MASKED ADDRESS],177407.63,active,2015-09-22
+3748,M***,A***,m***@gmail.com,,1948-**-**,[MASKED ADDRESS],177407.63,active,2015-09-22
 3749,S***,N***,s***@company.co.uk,***-***-0414,1962-**-**,[MASKED ADDRESS],40680.58,suspended,2024-04-27
 3750,P***,W***,p***@gmail.com,***-***-1272,1990-**-**,[MASKED ADDRESS],101381.14,inactive,2021-04-27
 3751,D***,D***,d***@gmail.com,***-***-8012,1976-**-**,[MASKED ADDRESS],22644.38,suspended,2016-01-17
@@ -2894,7 +2894,7 @@ AB-4232,J***,J***,j***@gmail.com,***-***-3735,1997-**-**,,139672.07,suspended,20
 3949,N***,B***,n***@company.co.uk,***-***-4988,1990-**-**,[MASKED ADDRESS],85755.00,suspended,2016-08-23
 3950,D***,N***,d***@mail.company.co.uk,***-***-8652,1979-**-**,[MASKED ADDRESS],,0,2016-04-15
 3951,L***,T***,l***@company.co.uk,***-***-2577,2005-**-**,[MASKED ADDRESS],139059.35,suspended,2018-07-20
-3952,O***,D***,o***@gmail.com,***-***-3376,1954-**-**,[MASKED ADDRESS],39948.75,active,2016-06-20
+3952,O***,D***,o***@gmail.com,,1954-**-**,[MASKED ADDRESS],39948.75,active,2016-06-20
 3953,A***,J***,a***@yahoo.com,***-***-8372,1941-**-**,[MASKED ADDRESS],183185.92,inactive,2022-05-03
 3954,S***,W***,s***@outlook.com,***-***-0863,1958-**-**,[MASKED ADDRESS],234319.94,inactive,2016-06-27
 3955,S***,W***,s***@yahoo.com,***-***-4497,1958-**-**,[MASKED ADDRESS],32095.50,suspended,2020-10-31
@@ -2915,7 +2915,7 @@ AB-4232,J***,J***,j***@gmail.com,***-***-3735,1997-**-**,,139672.07,suspended,20
 3970,L***,M***,l***@gmail.com,***-***-3656,1994-**-**,[MASKED ADDRESS],54663.50,active,2019-01-09
 3971,M***,J***,m***@mail.company.co.uk,***-***-5046,1980-**-**,[MASKED ADDRESS],60474.70,suspended,2022-07-11
 3972,S***,S***,s***@yahoo.com,***-***-6445,1993-**-**,[MASKED ADDRESS],143540.85,active,2024-11-03
-3973,P***,T***,p***@yahoo.com,***-***-2309,1984-**-**,[MASKED ADDRESS],103569.97,suspended,2021-01-28
+3973,P***,T***,p***@yahoo.com,,1984-**-**,[MASKED ADDRESS],103569.97,suspended,2021-01-28
 3974,T***,N***,t***@yahoo.com,***-***-1874,1954-**-**,[MASKED ADDRESS],168848.11,suspended,2022-04-12
 3975,M***,B***,m***@outlook.com,***-***-4051,2006-**-**,[MASKED ADDRESS],228276.07,inactive,2021-03-15
 3976,G***,D***,g***@yahoo.com,***-***-9999,2002-**-**,[MASKED ADDRESS],115989.70,suspended,2015-08-16

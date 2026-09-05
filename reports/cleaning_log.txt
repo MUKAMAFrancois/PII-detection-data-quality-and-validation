@@ -1,6 +1,6 @@
 ==========================================================================
 CLEANING LOG - customers_raw.csv -> customers_cleaned.csv
-Generated: 2026-09-05 18:40:02
+Generated: 2026-09-05 19:04:08
 ==========================================================================
 
 --------------------------------------------------------------------------
@@ -22,8 +22,8 @@ Generated: 2026-09-05 18:40:02
   first_name                64        0         22       46
   last_name                 80        0         17       52
   email                     43        0         81       40
-  phone                     48        7         28       50
-  date_of_birth             34       25          0       43
+  phone                     48       31          4       50
+  date_of_birth             38       21          0       43
   address                   19        0          0       55
   income                    68       14          0       34
   account_status            61        0         20       53
@@ -47,7 +47,7 @@ Generated: 2026-09-05 18:40:02
     reformatted                            47
     extension dropped                       1
   date_of_birth
-    format converted                       32
+    format converted                       36
     time component dropped                  2
   address
     whitespace collapsed                   19
@@ -65,9 +65,13 @@ Generated: 2026-09-05 18:40:02
   Removed because the value carried no information, not
   because it was inconvenient. Each becomes a visible gap.
   phone
+    letters, no recoverable digits          8
     placeholder number                      7
+    7 digits, expected 10                   7
+    11 digits, expected 10                  5
+    9 digits, expected 10                   4
   date_of_birth
-    unparseable as a date                  16
+    unparseable as a date                  12
     sentinel date                           9
   income
     range, no single value                  8
@@ -92,11 +96,7 @@ Generated: 2026-09-05 18:40:02
     malformed                              75
     multiple addresses                      6
   phone
-    letters in number                       8
-    7 digits, expected 10                   7
-    11 digits, expected 10                  5
-    international                           4
-    9 digits, expected 10                   4
+    valid international, outside XXX-XXX-XXXX      4
   account_status
     no canonical mapping                   20
 
@@ -124,9 +124,9 @@ Generated: 2026-09-05 18:40:02
 --------------------------------------------------------------------------
   metric                         before      after
   rows                             2998       2943
-  rows failing                      845        438
-  total failures                   1011        508
-  pass rate                       71.8%      85.1%
+  rows failing                      845        417
+  total failures                   1011        484
+  pass rate                       71.8%      85.8%
 
   by column:
   column             before    after    fixed
@@ -134,7 +134,7 @@ Generated: 2026-09-05 18:40:02
   first_name             72       70        2
   last_name              72       71        1
   email                  95       79       16
-  phone                  76       28       48
+  phone                  76        4       72
   date_of_birth          65        7       58
   address                89       88        1
   income                 37       19       18
@@ -150,6 +150,8 @@ Generated: 2026-09-05 18:40:02
     canonicalised
   date_of_birth   '9999-12-31' -> <removed>
     sentinel date
+  phone           '###-AAA-AAA' -> <removed>
+    letters, no recoverable digits
   last_name       '  Aaaaaaa ' -> 'Aaaaaaa'
     whitespace trimmed
   phone           '###.###.####' -> '###-###-####'
@@ -174,8 +176,6 @@ Generated: 2026-09-05 18:40:02
     leading zeros
   email           'aaaaa.aaaaa\u200b@aaaaaaa.aaa' -> 'aaaaa.aaaaa@aaaaaaa.aaa'
     lowercase/trim
-  address         '#### Aaaa ' -> '#### Aaaa'
-    whitespace collapsed
 
 END OF LOG
 ==========================================================================

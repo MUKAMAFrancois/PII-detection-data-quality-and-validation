@@ -57,6 +57,7 @@ from .config import (
     NUMERIC_RANGE_RE,
     OUTPUT_ENCODING,
     PHONE_EXTENSION_RE,
+    PHONE_INTERNATIONAL_RE,
     PHONE_PLACEHOLDERS,
     PHONE_VANITY_RE,
     QUARANTINE_PATH,
@@ -188,17 +189,26 @@ def clean_phone(raw: str) -> Result:
     v = clean_ws(raw)
     core = PHONE_EXTENSION_RE.sub("", v)
     had_extension = core != v
+
+    # A non-US number is a valid phone with no correct XXX-XXX-XXXX form.
+    # Deleting a real contact to satisfy a US format rule would be the
+    # over-eager-rule defect again, so it is kept and flagged.
+    if PHONE_INTERNATIONAL_RE.match(core):
+        return v, UNFIXABLE, "valid international, outside XXX-XXX-XXXX"
+
+    # Everything below cannot yield ten digits, so it is removed rather than
+    # left as junk in a column consumers will parse as XXX-XXX-XXXX.
     if PHONE_VANITY_RE.search(core):
-        return v, UNFIXABLE, "letters in number"
+        return "", NULLED, "letters, no recoverable digits"
+
     digits = re.sub(r"\D", "", core)
     if len(digits) == 11 and digits.startswith("1"):
         digits = digits[1:]
     if digits in PHONE_PLACEHOLDERS:
         return "", NULLED, "placeholder number"
     if len(digits) != 10:
-        reason = ("international" if v.startswith("+")
-                  else f"{len(digits)} digits, expected 10")
-        return v, UNFIXABLE, reason
+        return "", NULLED, f"{len(digits)} digits, expected 10"
+
     out = f"{digits[:3]}-{digits[3:6]}-{digits[6:]}"
     if out == raw:
         return out, OK, ""
@@ -221,8 +231,13 @@ def clean_date(raw: str) -> Result:
     if v in SENTINEL_DATES:
         return "", NULLED, "sentinel date"
 
-    head = DATE_TIME_SPLIT_RE.split(v)[0]
-    parsed = _from_formats(head)
+    # Whole value first: splitting on whitespace up front would reduce
+    # "March 15, 1985" to "March" and discard a perfectly parseable date.
+    head = v
+    parsed = _from_formats(v)
+    if parsed is None:
+        head = DATE_TIME_SPLIT_RE.split(v)[0]
+        parsed = _from_formats(head)
     if parsed is None and EXCEL_SERIAL_RE.fullmatch(v):
         parsed = EXCEL_EPOCH + timedelta(days=int(v))
     if parsed is None and EPOCH_SECONDS_RE.fullmatch(v):

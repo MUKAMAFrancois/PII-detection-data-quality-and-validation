@@ -1,6 +1,6 @@
 ==========================================================================
 MASKED SAMPLE - before / after comparison
-Generated: 2026-09-05 18:40:02
+Generated: 2026-09-05 19:04:08
 Records: 2943
 ==========================================================================
 
@@ -33,9 +33,9 @@ Records: 2943
   first_name          2898          45
   last_name           2892          51
   email               2906          37
-  phone               2888          55
+  phone               2864          79
   address             2889          54
-  date_of_birth       2877          66
+  date_of_birth       2881          62
 
   Gaps are passed through unmasked: masking an empty cell
   would fabricate the appearance of data.
