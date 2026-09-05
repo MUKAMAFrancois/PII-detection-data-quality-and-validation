@@ -1,0 +1,151 @@
+==========================================================================
+MASKED SAMPLE - before / after comparison
+Generated: 2026-09-05 18:27:24
+Records: 2943
+==========================================================================
+
+  NOTE: the BEFORE column below contains unmasked PII and so
+  inherits the source data's classification. Safe here because
+  the dataset is synthetic; run with show_raw=False for real
+  data so this file can be shared.
+
+--------------------------------------------------------------------------
+1. RULES APPLIED
+--------------------------------------------------------------------------
+  column          strategy       example                        result
+  first_name      initial_only   John                           J***  [OK]
+  last_name       initial_only   Doe                            D***  [OK]
+  email           email_local    john.doe@gmail.com             j***@gmail.com  [OK]
+  phone           phone_last4    555-123-4567                   ***-***-4567  [OK]
+  address         redact         123 Main Street, Springfield   [MASKED ADDRESS]  [OK]
+  date_of_birth   year_only      1985-03-15                     1985-**-**  [OK]
+
+  Each row is the strategy run against the example config
+  records for it; MISMATCH means masking drifted from spec.
+
+  PII left unmasked: income, customer_id
+  Deliberately unmasked: income (analytics utility)
+
+--------------------------------------------------------------------------
+2. COVERAGE
+--------------------------------------------------------------------------
+  column            masked   gaps left
+  first_name          2898          45
+  last_name           2892          51
+  email               2906          37
+  phone               2888          55
+  address             2889          54
+  date_of_birth       2877          66
+
+  Gaps are passed through unmasked: masking an empty cell
+  would fabricate the appearance of data.
+
+--------------------------------------------------------------------------
+3. BEFORE / AFTER
+--------------------------------------------------------------------------
+  record 1 (customer_id 1001)
+    customer_id     1001                                  (not masked)
+    first_name      John                               -> J***
+    last_name       Moore                              -> M***
+    email           john.moore@gmail.com               -> j***@gmail.com
+    phone           232-130-1535                       -> ***-***-1535
+    date_of_birth   1985-05-03                         -> 1985-**-**
+    address         9196 Elm Boulevard, Fairview       -> [MASKED ADDRESS]
+    income          219285.58                             (not masked)
+    account_status  active                                (not masked)
+    created_date    2018-10-25                            (not masked)
+
+  record 2 (customer_id 1002)
+    customer_id     1002                                  (not masked)
+    first_name      Chloe                              -> C***
+    last_name       Uwase                              -> U***
+    email           chloe.uwase+newsletter@gmail.com   -> c***@gmail.com
+    phone           947-570-8785                       -> ***-***-8785
+    date_of_birth   1973-12-16                         -> 1973-**-**
+    address         4804 Pine Road, Greenville         -> [MASKED ADDRESS]
+    income          196671.06                             (not masked)
+    account_status  active                                (not masked)
+    created_date    2019-04-06                            (not masked)
+
+  record 3 (customer_id 1003)
+    customer_id     1003                                  (not masked)
+    first_name      Samuel                             -> S***
+    last_name       Jackson                            -> J***
+    email           samuel.jackson@gmail.com           -> s***@gmail.com
+    phone           375-646-4010                       -> ***-***-4010
+    date_of_birth   1974-01-15                         -> 1974-**-**
+    address         9126 Elm Boulevard, Clinton        -> [MASKED ADDRESS]
+    income          208123.61                             (not masked)
+    account_status  inactive                              (not masked)
+    created_date    2017-05-14                            (not masked)
+
+  record 4 (customer_id 1004)
+    customer_id     1004                                  (not masked)
+    first_name      Chloe                              -> C***
+    last_name       Müller                             -> M***
+    email           chloe.muller@company.co.uk         -> c***@company.co.uk
+    phone           342-352-9197                       -> ***-***-9197
+    date_of_birth   1992-06-11                         -> 1992-**-**
+    address         9561 Washington Blvd, Clinton      -> [MASKED ADDRESS]
+    income          36363.71                              (not masked)
+    account_status  active                                (not masked)
+    created_date    2016-10-17                            (not masked)
+
+  record 5 (customer_id 1005)
+    customer_id     1005                                  (not masked)
+    first_name      Michael                            -> M***
+    last_name       de la Cruz                         -> d***
+    email           michael.de.la.cruz@gmail.com       -> m***@gmail.com
+    phone           317-798-8797                       -> ***-***-8797
+    date_of_birth   1997-07-03                         -> 1997-**-**
+    address         4809 Washington Blvd, Apt 47, Franklin -> [MASKED ADDRESS]
+    income          76896.43                              (not masked)
+    account_status  active                                (not masked)
+    created_date    2016-03-11                            (not masked)
+
+  record 6 (customer_id 1006)
+    customer_id     1006                                  (not masked)
+    first_name      D'Arcy                             -> D***
+    last_name       Wilson                             -> W***
+    email           darcy.wilson@gmail.com             -> d***@gmail.com
+    phone           700-119-1832                       -> ***-***-1832
+    date_of_birth   1967-08-03                         -> 1967-**-**
+    address         3947 Oak Avenue, Apt 5, Riverside  -> [MASKED ADDRESS]
+    income          140185.95                             (not masked)
+    account_status  suspended                             (not masked)
+    created_date    2021-03-01                            (not masked)
+
+--------------------------------------------------------------------------
+4. RE-IDENTIFICATION: BEFORE vs AFTER
+--------------------------------------------------------------------------
+  combination                k=1 before   k=1 after
+  full name                        2.1%        0.7%
+  full name + DOB                 99.6%       73.7%
+  DOB + address                   99.6%        0.1%
+  DOB + income                    99.6%       99.4%
+  quasi-identifier set            99.6%       99.4%
+
+  k=1 is the share of records whose combination is unique in
+  the file, and so re-identifiable without any direct name.
+
+--------------------------------------------------------------------------
+5. RESIDUAL RISK
+--------------------------------------------------------------------------
+  income is unmasked and 99.2% of its values are
+  unique, so it stays a quasi-identifier: birth year plus
+  income still singles out most records. Masking the other
+  fields does not make this extract anonymous, only
+  pseudonymous, and it still needs access control.
+
+  customer_id is preserved as the join key, so the masked
+  extract can be re-linked to the source by anyone holding
+  both files.
+
+--------------------------------------------------------------------------
+6. VERIFICATION
+--------------------------------------------------------------------------
+  rule checks : 6 passed, 0 failed
+  leak checks : none
+
+END OF SAMPLE
+==========================================================================
