@@ -1,217 +1,216 @@
-# Reflection — PII Detection & Data Quality Validation
+# Project Report — PII Detection & Data Quality Validation
 
-All figures are from the committed reports for a run over 2,998 loaded rows
-(3,003 lines; 5 excluded as ragged before parsing).
+## What we built
 
----
+A program that takes a messy customer file, reports everything wrong with it,
+finds the personal information inside, fixes what can be fixed, hides the
+personal details, and writes a report at every step. One command, about four
+seconds. Every number below comes from the files in `reports/`.
 
-## 1. Top 5 data quality issues
+## 1. How we made the test data
 
-**1. `created_date` was almost never a date — 261 failures (26% of all
-failures), all fixed.** 227 rows carried `2021-03-15 09:00:00`, a single
-timestamp repeated across an entire bulk-import block; the rest were US-format
-or timezone-stamped. *Fix:* parse the whole value, then fall back to splitting
-off a time component, then Excel serials and epoch seconds. *Impact:* the
-column was unusable for any cohort or retention analysis, and the repeated
-timestamp would have shown ~200 customers joining in the same second. Now 0
-failures.
+We had no real customer file, so we wrote a program to invent one. That was
+better than using real data anyway: we decided in advance exactly what was
+wrong with it, which gave us an answer key to check our detection against.
 
-**2. `customer_id` is not a primary key — 19 values repeated across 44 rows,
-still unfixed.** *Fix:* none possible. A duplicate key cannot be resolved
-without the source system; guessing which row owns the id would silently
-corrupt the join. *Impact:* the highest-severity issue in the file. Until it is
-resolved, no join to any other system is trustworthy, and 44 rows could be
-double-counted in any aggregate. This is the one finding that should block a
-production load outright.
+The generator makes **3,000 records**, roughly 70% clean, with **1,630 faults**
+deliberately injected into the rest. It uses a fixed starting number, so anyone
+running it gets an identical file and can reproduce these results exactly.
 
-**3. Phone numbers arrived in nine different shapes — 76 failures, 72 fixed.**
-Parenthesised, dotted, bare digits, `+1`-prefixed, extensions, vanity strings.
-*Fix:* strip extension and separators, drop a leading US country code, reformat
-to `XXX-XXX-XXXX`; remove what cannot yield ten digits. *Impact:* deduplication
-by phone was impossible, since the same subscriber appeared under multiple
-spellings. Four valid international numbers remain non-conforming by design.
+### What we broke, column by column
 
-**4. Missing values hid behind twelve different spellings — ~1.8% per column.**
-`NULL`, `N/A`, `n/a`, `-`, `?`, `TBD`, `Unknown`, `Not Provided` and whitespace
-all mean absent. *Fix:* one sentinel set in config, applied by a single
-`is_null_sentinel()`. *Impact:* counting only empty strings would have
-understated the gap by roughly an order of magnitude and produced a
-falsely clean completeness report.
+| Column | Faults we introduced | Count |
+| :--- | :--- | ---: |
+| `created_date` | 200 records sharing one import timestamp, US-style dates, timezones, impossible dates like `2023-13-45` | 337 |
+| `customer_id` | Missing, text IDs (`AB-1234`), scientific notation, leading zeros, negatives, **duplicates** | 162 |
+| `first_name` / `last_name` | Missing, junk (`J0hn`, `XXX`), wrong capitalisation, invisible padding characters | 305 |
+| `address` | Missing, 20 records sharing one address, ALL CAPS, too short, too long, no city | 152 |
+| `email` | Missing, wrong case, no `@`, no domain, two addresses in one cell | 145 |
+| `phone` | Missing, dots/brackets/spaces, letters (`555-CAL-LME`), fake numbers, wrong digit counts | 142 |
+| `account_status` | Missing, case variants, typos (`actiive`), codes (`A`/`I`/`S`, `0`/`1`/`2`), unknown states | 134 |
+| `income` | Missing, currency symbols, thousands commas, ranges (`24460-34460`), negatives, `fifty thousand` | 121 |
+| `date_of_birth` | Missing, US format, impossible (`1985-02-30`), the text `invalid_date`, ages over 150, future dates | 118 |
+| The file itself | Byte-order mark, mixed line endings, rows with wrong column counts, an embedded line break, duplicate rows | 14 |
 
-**5. `account_status` had 26 distinct values for 3 valid states — 45 failures,
-27 fixed.** *Fix:* an unambiguous canonical map handles case, separators, typos
-(`actiive`), letter codes and the legacy `dormant`. *Impact:* any segmentation
-by account state was wrong. 20 rows remain: `closed`, `pending` and `banned`
-are real lifecycle states the schema cannot express, and the numeric/boolean
-codes have no codebook — mapping them would have invented account state on
-financial records.
+One deliberate trap: we put **valid but awkward names** — `O'Brien`,
+`van der Berg`, `Ngũgĩ`, `Mary-Jane` — in the *clean* pile. A careless rule that
+only accepts A–Z flags these real customers as dirty. Catching that was the
+point.
 
-Overall: **1,011 failures → 484, pass rate 71.8% → 85.8%**, 98.2% row
-retention. The residual is genuinely unfixable in-file: 150 missing required
-values, 44 duplicate keys, 79 malformed emails.
+## 2. What we found
 
----
+The program read 2,998 rows; five were unreadable and set aside. Checking the
+rest against the rules, **845 rows (28%) failed**, breaking 1,011 rules between
+them.
 
-## 2. Risk assessment — sensitivity of the detected PII
+It sorted those into **383 the program could repair itself** and **628 needing
+someone to go back to the source system**. That split became the cleaning plan.
 
-Eight of ten columns carry PII; five are HIGH sensitivity. 23,609 PII cells are
-populated across 2,998 records — an exposure score of 59,043 out of a possible
-59,960, or **98.5%**. This file is almost entirely personal data.
+## 3. The five biggest problems
 
-- **`email`, `phone` (direct, HIGH)** — unique contact identifiers. 2,909
-  addresses and 2,925 numbers were recovered by regex. A leak hands an attacker
-  a ready-made phishing, smishing and credential-stuffing target list.
-- **`date_of_birth` (quasi, HIGH)** — immutable and a standard identity
-  verification factor. Unlike a password, a birth date cannot be reset after a
-  breach.
-- **`address` (quasi, HIGH)** — enables physical-world harm and household
-  linkage. The profiler also found one address shared by 21 records, which is a
-  fraud signal in its own right.
-- **`income` (sensitive, HIGH)** — financial data, carrying discrimination and
-  predatory-targeting risk.
-- **`first_name`, `last_name` (direct, MEDIUM)** — weak alone, strong in
-  combination.
+**1. Account creation dates were rarely dates — 261 failures, a quarter of
+everything.** 227 carried the identical timestamp `2021-03-15 09:00:00`, the
+fingerprint of a bulk import. We taught the program ten date formats plus
+Excel's internal number format, and to strip attached times. Without this the
+column was useless — it showed 200 people joining in the same second.
+**All 261 fixed.**
 
-The measured finding matters more than the classification. **Full name alone is
-unique for only 4.6% of records, but name plus date of birth is unique for
-99.6%.** So is date of birth plus address, with no name at all. Removing names
-would not have anonymised this file — which is precisely why the masking spec
-covers DOB and address.
+**2. The customer ID is not unique — 19 IDs repeated across 44 rows.** We fixed
+none, deliberately: you cannot tell which record owns a repeated ID without the
+source system, and guessing would silently corrupt every future join. This is
+the most serious problem in the file. Until it is resolved, linking this data to
+any other system is unreliable and 44 customers may be double-counted.
+**This should block the file from going live.**
 
-Aggravating context: this is a financial services dataset, so a breach is
-reportable, and the records support both identity theft and account takeover
-without any further enrichment.
+**3. Phone numbers came in nine shapes — 76 failures.** Brackets, dots, spaces,
+country codes, extensions, letters. We stripped punctuation and reformatted to
+`555-123-4567`, removing anything that could never make ten digits. **72 fixed.**
+You cannot spot a duplicate customer when their number is written five ways.
 
----
+**4. "Missing" was spelled twelve ways — about 1.8% of every column.** `NULL`,
+`N/A`, `-`, `?`, `TBD`, `Unknown`, blank spaces and more. We built one shared
+list of everything meaning "no value". Counting only empty cells would have
+under-reported the gaps roughly tenfold.
 
-## 3. Masking trade-offs — utility vs privacy
+**5. Account status had 26 values for 3 valid states — 45 failures.** We
+translated the unambiguous cases: capitalisation, typos, letter codes, and the
+legacy word `dormant`. **27 fixed.** The remaining 18 we refused to guess —
+`closed`, `pending` and `banned` are real states our system has no slot for, and
+codes like `0` and `TRUE` have no documented meaning. Inventing an account
+status on a financial record is worse than admitting we don't know it.
 
-Masking works where it was applied. `DOB + address` uniqueness collapses from
-**99.6% to 0.1%**.
+## 4. Personal information in the file
 
-But income is deliberately left unmasked, because the masked extract exists for
-analytics and income is the column analysts actually need. Income is **99.2%
-unique**, which makes it a quasi-identifier on its own. The consequence is
-measurable: `DOB + income` still identifies **99.4%** of records after masking,
-essentially unchanged from 99.6% before. Even name-initial plus birth year
-leaves 73.7% unique.
+**Eight of ten columns hold personal information; five are high-sensitivity.**
+23,609 cells contain personal data — 98.5% of everything that could. This is not
+a file with some personal data in it; it is almost entirely personal data.
 
-The masked extract is therefore **pseudonymous, not anonymous**. Two further
-gaps are deliberate and worth stating plainly: `customer_id` is preserved as a
-join key, so anyone holding both files can re-link them completely; and
-preserving the email domain and the last four phone digits — both required by
-the brief's format — retains real signal.
+| Type | Columns | Why it's sensitive |
+| :--- | :--- | :--- |
+| Directly identifies someone | Name, email, phone | A leak hands an attacker a ready-made contact list for scams |
+| Identifies in combination | Date of birth, address | A birth date verifies identity — and unlike a password, can never be changed |
+| Financially sensitive | Income | Discrimination and predatory targeting |
 
-That is a defensible trade if the extract stays inside an access-controlled
-environment, and indefensible if it is treated as safe to share widely. The
-honest options are to band income into ranges, drop it, or keep it and keep the
-access controls. We kept it, and wrote down why. What would be wrong is
-shipping it while *calling* the file anonymised.
+**The key finding is about combinations.** A full name alone identifies only
+**4.6%** of people uniquely — there are plenty of Johns and Smiths. But **name
+plus date of birth identifies 99.6%**, and so does date of birth plus address
+with no name at all.
 
----
+Removing names would *not* have made this file anonymous. That is why the
+masking rules cover birth dates and addresses too.
 
-## 4. Validation strategy — effectiveness
+## 5. Hiding the personal data — and what it costs
 
-Pydantic over Great Expectations: per-row model validation produces structured
-per-field errors that map directly onto "document specific row/column
-failures", without a large dependency tree for a 3k-row file. Uniqueness does
-not fit a per-row model, so it is checked separately across the frame — a
-reminder that row-level and dataset-level constraints are different kinds of
-rule.
+`John` becomes `J***`, `john.doe@gmail.com` becomes `j***@gmail.com`, addresses
+become `[MASKED ADDRESS]`, `1985-03-15` becomes `1985-**-**`. **17,330 values
+masked, none leaked.**
 
-What worked well:
+We then measured whether it worked instead of assuming:
 
-- **Splitting failures into auto-fixable and needs-source.** 1,011 failures
-  became a work order of 383 repairable and 628 requiring the source system.
-  That distinction drove the entire cleaning stage.
-- **Validating twice.** Pre-clean is the assessment; post-clean is the proof.
-  Without the second pass, "we fixed it" would be an assertion.
-- **Rules deliberately narrowed.** `NAME_RE` accepts `O'Brien`, `Ngũgĩ` and
-  `van der Berg`. A naive `[A-Za-z]+` rule would have flagged real customers as
-  dirty — a false positive is a data quality defect too.
+| Combination | Identifies uniquely, before | After masking |
+| :--- | ---: | ---: |
+| Birth date + address | 99.6% | **0.1%** |
+| Name + birth date | 99.6% | 73.7% |
+| **Birth date + income** | 99.6% | **99.4%** |
 
-What the rules do not catch: anything requiring outside knowledge. An email
-that is well-formed but belongs to someone else, an address that parses but
-does not exist, an income that is plausible but wrong. Format validation
-establishes that data is *well-formed*, never that it is *true*. Three rows in
-this file are field-shifted by an embedded comma — every cell parses, and the
-values are simply in the wrong columns.
+Masking the address worked almost perfectly. But we **deliberately left income
+unmasked**, because analysis is the point of the shared file and income is what
+analysts need. Incomes are nearly all different — **99.2% are unique** — so
+income acts like a fingerprint, and birth year plus income still singles out
+99.4% of customers.
 
-The 30% failure-rate gate is also a blunt instrument. It passed at 14.2% while
-44 duplicate primary keys remained, which is arguably a blocking defect. A
-better gate would be per-rule: any duplicate key fails the run regardless of
-the aggregate rate.
+The masked file is therefore **not anonymous**, only safer. The customer ID is
+also kept so the file can be joined to other systems, meaning anyone holding
+both files can undo the masking entirely.
 
----
+That trade is acceptable *if* the file stays inside the company behind access
+controls, and unacceptable if published. The real options are: band incomes into
+ranges, drop income, or keep it and keep the controls. We chose the third and
+wrote down why. What would be wrong is sharing it while calling it anonymous.
 
-## 5. Production operations
+## 6. Did the checks work?
 
-**Scheduling.** Daily, triggered by arrival of the source extract rather than
-by wall-clock time, so a late upstream file delays the run instead of producing
-an empty one. The pipeline is idempotent — same input, same output — so a
-retry is always safe.
+We used a library called Pydantic, which reports failures one field at a time —
+which record, which column, which rule — rather than just "this file is bad".
+Uniqueness had to be checked separately, since you cannot tell a record is a
+duplicate by looking at it alone.
 
-**Failure handling.** Stages are classified critical (`load`, `clean`, `mask`)
-or reporting. A critical failure aborts and returns a non-zero exit code; a
-failing report is recorded and the run continues, because a broken report
-should not block the data products. Everything is logged to `logs/pipeline.log`
-with per-stage timings, and the execution report is written even on abort.
-Stages that never ran report `not reached` rather than zero, so an aborted run
-cannot be misread as having produced empty output.
+What worked: sorting failures into "fixable" and "ask the source system", which
+turned 1,011 errors into an actionable list; checking twice, before and after
+cleaning, so "we fixed it" is demonstrated rather than claimed; and writing
+rules loose enough that `O'Brien` and `van der Berg` pass, since flagging real
+customers is its own data quality problem.
 
-**What I would add before trusting this in production:**
+What the checks **cannot** do is tell whether data is true. An email can be
+perfectly formatted and belong to someone else. They confirm data is
+*well-formed*, never that it is *correct*.
 
-- Alerting on exit code and on the quality gate, not just a log file.
-- Trend tracking. A one-off 14.2% failure rate is context-free; a jump from 14%
-  to 40% is an upstream incident and is the signal actually worth paging on.
-- Quarantine review with an owner and an SLA. `customers_quarantined.csv` is
-  currently written and never read, which makes it a queue with no consumer.
-- Schema-change detection at load. Today a renamed column would surface as a
-  wave of confusing validation failures rather than a clear "the contract
-  changed".
-- Retention and access control on the raw file, which is the highest-risk
-  artifact in the repository.
+One honest weakness: our quality gate passes anything under a 30% failure rate.
+The cleaned file passed at 14.2% while still holding 44 duplicate IDs. A better
+gate would fail outright on a duplicate key, whatever the overall percentage.
 
----
+## 7. Running this for real
 
-## 6. Lessons learned
+**Schedule.** Daily, triggered by the source file arriving rather than by the
+clock, so a late file delays the run instead of processing nothing. The program
+is repeatable — same input, same output — so a retry is always safe.
 
-**The cleaning rule is more dangerous than the dirty data.** Three separate
-rules corrupted correct records before being caught: `.title()` rewrote
-`van der Berg` to `Van Der Berg` across ~330 already-valid surnames, a naive
-alphabetic check would have rejected `O'Brien`, and blanket phone normalization
-would have deleted valid international numbers. Each looked obviously right.
-The pattern is the same every time — a rule written for the common case,
-applied without asking what legitimate data it also matches.
+**When something breaks.** Steps are split into essential (reading, cleaning,
+masking) and reporting. An essential failure stops the run and returns an error
+code; a failed report is logged but does not block the data. A report is written
+even when the run fails, and steps that never ran say "not reached" rather than
+zero, so a failed run cannot be mistaken for an empty one.
 
-**Tests find what review does not.** The suite was written last and immediately
-caught a bug five modules deep: `clean_date` split on whitespace before trying
-the format list, so `March 15, 1985` became `March`, matched nothing and was
-silently *nulled*. Long-form dates were being destroyed rather than converted,
-and the same bug in the validator reported them as unrecoverable. Neither the
-reports nor manual inspection had revealed it, because destroyed data leaves no
-failure behind — it just becomes a gap.
+**Before trusting it in production we would add:**
 
-**A metric that looks better may mean data got worse.** Nulling every
-problematic value would have raised the pass rate substantially while
-discarding evidence. Deciding early to repair format but leave semantic
-violations visible kept the numbers honest, at the cost of a less impressive
-headline. Related: the validator initially reported `PASS` on the raw data
-because a release gate meant for cleaned output was being applied pre-clean.
+- Alerts on failure and on the quality gate, not just a log nobody reads.
+- Quality tracked over time. 14% means nothing alone; 14% jumping to 40% means
+  something upstream broke, and that is worth waking someone for.
+- An owner for the rejected records — we currently write them to a file nobody
+  reads.
+- A check for the source file changing shape, so a renamed column reports "the
+  format changed" instead of a confusing wave of errors.
+- Restricted access and a deletion schedule for the raw file, the most sensitive
+  thing in the project.
 
-**Measure privacy claims; do not assert them.** "We masked the PII" felt
-complete until re-identification was actually computed and showed 99.4% of
-records still unique via DOB and income. The masking was not wrong — it was
-sound, and still insufficient on its own.
+## 8. What we learned
 
-**Reports about sensitive data are themselves sensitive.** The first PII report
-printed real addresses as examples, and the first masker left the second
-address in a two-address cell fully readable, publishing six real email
-addresses into the "masked" output. Both were caught by scanning the outputs
-for source values rather than by reading the code.
+**The cleaning rule is more dangerous than the messy data.** Three "obvious"
+rules damaged correct records. The worst rewrote `van der Berg` as
+`Van Der Berg` across about 330 already-correct surnames. Each time the cause
+was identical: a rule written for the common case, applied without asking what
+valid data it would also catch.
 
-**The unglamorous decisions carried the most weight.** Centralising every
-threshold in one config file prevented a class of bug that would have been
-almost impossible to find later — the validator and the cleaner quietly
-disagreeing about what "valid" means, with each report internally consistent
-and the pair contradictory.
+**Automated tests found what reading the code did not.** Written last, the test
+suite immediately exposed a bug five files deep: dates like `March 15, 1985`
+were being **deleted** instead of converted. Nobody spotted it because deleted
+data leaves no error behind — it just becomes a gap.
+
+**A better-looking number can mean worse data.** Deleting every problem value
+would have raised our pass rate while destroying evidence. Fixing formatting but
+leaving real problems visible gives a less impressive headline and a more honest
+file.
+
+**Privacy has to be measured, not asserted.** "We masked the personal data" felt
+finished until we calculated it and found 99.4% of records still identifiable
+through income and birth year.
+
+**Reports about sensitive data are themselves sensitive.** Our first PII report
+printed real addresses as examples, and our first masking step left the second
+address in a two-address cell readable — publishing six real email addresses
+into the file we were calling "masked". Both were caught by scanning the outputs
+for real values, not by reading the code.
+
+## Results
+
+| | Before | After |
+| :--- | ---: | ---: |
+| Rows failing at least one rule | 845 | **417** |
+| Total rule failures | 1,011 | **484** |
+| Pass rate | 71.8% | **85.8%** |
+| Records kept | — | 2,943 of 2,998 (98.2%) |
+| Personal values masked | — | 17,330, zero leaks |
+
+The 484 remaining failures are not oversights: 150 missing required values, 44
+duplicate IDs and 79 malformed emails, all of which need the source system
+rather than more clever code.
