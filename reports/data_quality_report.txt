@@ -1,0 +1,213 @@
+==========================================================================
+DATA QUALITY REPORT - customers_raw.csv
+Generated: 2026-09-05 13:56:56
+Rows loaded: 2998   Expected schema: 10 columns
+==========================================================================
+
+--------------------------------------------------------------------------
+1. FILE-LEVEL INTEGRITY
+--------------------------------------------------------------------------
+  BOM on header              : YES
+  line endings               : 159 CRLF vs 2845 LF
+  mojibake detected          : YES
+  U+FFFD replacement chars   : 0
+  ragged rows (excluded)     : 5
+    1. line 201: 11 fields - 1200,D'Arcy,Thomas,darcy.thomas@yahoo.com,763-862-4162,1980-...
+    2. line 309: 7 fields - 1308,Mary-Jane,Anderson,maryjane.anderson@gmail.com,833-654-...
+    3. line 310: 5 fields - Apt 4, Riverside,19458.79,active,2024-05-29...
+    4. line 3003: 11 fields - 9001,Extra,Field,row,with,eleven,fields,like,this,one,here...
+    5. line 3004: 9 fields - 9002,Missing,Some,Fields,row,with,only,nine,fields...
+  header matches expected schema : yes
+
+--------------------------------------------------------------------------
+2. COMPLETENESS
+--------------------------------------------------------------------------
+  customer_id         55 missing (  1.8%)
+  first_name          46 missing (  1.5%)
+  last_name           52 missing (  1.7%)
+  email               40 missing (  1.3%)
+  phone               50 missing (  1.7%)
+  date_of_birth       43 missing (  1.4%)
+  address             55 missing (  1.8%)
+  income              34 missing (  1.1%)
+  account_status      53 missing (  1.8%)
+  created_date        45 missing (  1.5%)
+
+  Worst column: 'customer_id' at 1.8% missing
+  NOTE: counts include sentinels (NULL, N/A, nan, '-', 'unknown'), not just empty cells.
+
+--------------------------------------------------------------------------
+3. TYPE INFERENCE (non-null values)
+--------------------------------------------------------------------------
+  customer_id      -> string   ( 98.2% parse as integer)   <-- expected integer
+  first_name       -> string
+  last_name        -> string
+  email            -> string
+  phone            -> string
+  date_of_birth    -> string   ( 98.2% parse as date)   <-- expected date
+  address          -> string
+  income           -> string   ( 98.3% parse as numeric)   <-- expected numeric
+  account_status   -> string
+  created_date     -> string   ( 91.2% parse as date)   <-- expected date
+
+  NOTE: all columns load as object/str due to dtype=str.
+  The verdict is the strictest type EVERY value satisfies; the
+  percentage is the share that parses cleanly. A column reading
+  'string (97.6% parse as integer)' needs coercion, not redesign.
+
+--------------------------------------------------------------------------
+4. FORMAT ISSUES
+--------------------------------------------------------------------------
+  phone:
+    standard XXX-XXX-XXXX : 2872
+    bare 10 digits        : 4
+    non-standard / broken : 72
+      e.g. '555-CAL-LME' x5
+      e.g. '5.55123E+09' x3
+      e.g. '+44 20 7946 0958' x2
+      e.g. '+250 788 123 456' x2
+      e.g. '485.355.1858' x1
+  date_of_birth:
+    ISO YYYY-MM-DD        : 2902
+    ISO-shaped, impossible: 10
+    other parseable format: 35
+    unparseable garbage   : 8
+      alt format e.g. '03/04/1985' x7
+      alt format e.g. '03/18/1992' x1
+      alt format e.g. 'June 28, 1950' x1
+      garbage e.g. 'invalid_date' x5
+      garbage e.g. '2005-12-15 00:00:00' x1
+      garbage e.g. '473990400' x1
+      garbage e.g. '1965-09-29 00:00:00' x1
+  created_date:
+    ISO YYYY-MM-DD        : 2692
+    ISO-shaped, impossible: 10
+    other parseable format: 36
+    unparseable garbage   : 215
+      alt format e.g. '01/22/2022' x2
+      alt format e.g. '2022-01-21T14:32:10+02:00' x1
+      alt format e.g. '12/20/2019' x1
+      garbage e.g. '2021-03-15 09:00:00' x198
+      garbage e.g. '2015-11-21 04:35:10' x1
+      garbage e.g. '2020-11-11 20:47:10' x1
+      garbage e.g. '2023-02-09 23:51:10' x1
+      garbage e.g. '2015-05-19 15:59:10' x1
+  email: 95 fail basic regex (3.2% of present values)
+    non-lowercase (cosmetic): 14
+      e.g. 'emma.smith@' x2
+      e.g. 'aline.n/a@gmail.com' x2
+      e.g. 'grace.taylor@gmail' x1
+      e.g. 'darcy.muller_outlook.com' x1
+      e.g. 'john!!.brown+newsletter@gmail.com' x1
+  first_name: 22 fail alphabetic pattern, 26 have stray whitespace, 45 not Title Case
+  last_name: 17 fail alphabetic pattern, 33 have stray whitespace, 367 not Title Case
+
+--------------------------------------------------------------------------
+5. UNIQUENESS
+--------------------------------------------------------------------------
+  customer_id: 2998 rows, 2943 present, 25 duplicate occurrences across 19 repeated values
+      '0' appears 8x
+      '1325' appears 2x
+      '1127' appears 2x
+      '3859' appears 2x
+      '1245' appears 2x
+    -> customer_id is NOT unique (primary key constraint violated)
+  email: 2998 rows, 2958 present, 1116 duplicate occurrences across 756 repeated values
+      'john.ngugi@outlook.com' appears 7x
+      'jane.smith@company.co.uk' appears 6x
+      'chloe.van.der.berg@yahoo.com' appears 6x
+      'nadia.brown@company.co.uk' appears 6x
+      'peter.moore@yahoo.com' appears 6x
+  phone: 2998 rows, 2948 present, 26 duplicate occurrences across 20 repeated values
+      '555-CAL-LME' appears 5x
+      '111-111-1111' appears 3x
+      '123-456-7890' appears 3x
+      '5.55123E+09' appears 3x
+      '603-251-2165' appears 2x
+
+--------------------------------------------------------------------------
+6. INVALID VALUES
+--------------------------------------------------------------------------
+  customer_id:
+    non-numeric           : 24
+    <= 0                  : 23
+  income:
+    unparseable as number : 25
+    negative              : 9
+    > $10,000,000          : 9
+      unparseable e.g. 'fifty thousand' x2
+      unparseable e.g. '24460-34460' x1
+      unparseable e.g. '124358 USD' x1
+      unparseable e.g. '67k' x1
+      unparseable e.g. '53397-63397' x1
+  date_of_birth (semantic, ISO-parseable subset only):
+    ISO-parseable rows       : 2902 of 2955
+    before 1900 (age > ~150) : 8
+    in the future            : 2
+    sentinel dates           : 6
+    born after 2006 (minor)  : 11
+  address:
+    < 10 chars            : 27
+    > 200 chars           : 7
+
+--------------------------------------------------------------------------
+7. CATEGORICAL VALIDITY: account_status
+--------------------------------------------------------------------------
+  exact match (already clean) : 2874
+  valid case-insensitively    : 2900
+  recoverable by lowercasing  : 26
+  invalid / unmappable        : 45
+  distinct raw values         : 26
+  raw value counts:
+    'suspended'            973
+    'active'               967
+    'inactive'             934
+    'ACTIVE'                 8
+    'dormant'                7   <-- INVALID
+    'actiive'                6   <-- INVALID
+    'INACTIVE'               5
+    'pending'                4   <-- INVALID
+    'Active'                 4
+    'Inactive'               3
+    'TRUE'                   3   <-- INVALID
+    'Suspended'              3
+    'SUSPENDED'              3
+    'FALSE'                  3   <-- INVALID
+    'banned'                 3   <-- INVALID
+    'in-active'              3   <-- INVALID
+    'A'                      2   <-- INVALID
+    '2'                      2   <-- INVALID
+    'I'                      2   <-- INVALID
+    '1'                      2   <-- INVALID
+    'in active'              2   <-- INVALID
+    'closed'                 2   <-- INVALID
+    'suspnded'               1   <-- INVALID
+    'S'                      1   <-- INVALID
+    'actve'                  1   <-- INVALID
+    '0'                      1   <-- INVALID
+
+--------------------------------------------------------------------------
+8. CROSS-FIELD ANOMALIES
+--------------------------------------------------------------------------
+  comparable row pairs (both dates ISO): 2830
+  created_date before date_of_birth : 8
+  under 18 at account creation      : 219
+  income = 0 while active           : 4
+  duplicate emails across rows      : 1854
+  addresses shared by >=10 rows     : 1 distinct (21 rows involved)
+  fully duplicated rows             : 12
+
+--------------------------------------------------------------------------
+9. PRIORITY SUMMARY
+--------------------------------------------------------------------------
+  [HIGH]   customer_id not unique - 19 repeated values; primary key unusable until resolved
+  [MEDIUM] 'customer_id' 1.8% missing (55 rows)
+  [MEDIUM] 'address' 1.8% missing (55 rows)
+  [MEDIUM] 'account_status' 1.8% missing (53 rows)
+  [HIGH]   account_status has 45 values outside the allowed set
+  [MEDIUM] non-standard date/phone formats require normalization
+  [MEDIUM] PII present in all rows (see pii_detection_report.txt)
+  [LOW]    file artifacts (BOM, line endings) - handled at load time
+
+END OF REPORT
+==========================================================================
