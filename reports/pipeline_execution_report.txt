@@ -1,7 +1,7 @@
 ==========================================================================
 PIPELINE EXECUTION REPORT
-Started : 2026-09-05 19:04:05
-Finished: 2026-09-05 19:04:09   (3.9s)
+Started : 2026-09-05 19:57:37
+Finished: 2026-09-05 19:57:43   (5.7s)
 Input   : data/raw/customers_raw.csv
 Status  : SUCCESS
 ==========================================================================
@@ -10,13 +10,13 @@ Status  : SUCCESS
 1. STAGES
 --------------------------------------------------------------------------
   stage            status    seconds  detail
-  load             ok           0.01  2998 rows, 5 ragged rows excluded
-  profile          ok           0.42  -> data_quality_report.txt
-  detect_pii       ok           0.70  -> pii_detection_report.txt
-  validate_pre     ok           0.44  845 of 2998 rows failing
-  clean            ok           0.84  2943 rows written
-  validate_post    ok           0.18  417 of 2943 rows failing
-  mask             ok           1.30  2943 rows masked
+  load             ok           0.02  2998 rows, 5 ragged rows excluded
+  profile          ok           0.62  -> data_quality_report.txt
+  detect_pii       ok           1.10  -> pii_detection_report.txt
+  validate_pre     ok           0.66  845 of 2998 rows failing
+  clean            ok           1.20  2943 rows written
+  validate_post    ok           0.25  417 of 2943 rows failing
+  mask             ok           1.83  2943 rows masked
 
 --------------------------------------------------------------------------
 2. DATA FLOW
@@ -60,7 +60,7 @@ Status  : SUCCESS
   [x] reports/masked_sample.txt
   [x] reports/pipeline_execution_report.txt   (this file)
   [x] data/cleaned/customers_cleaned.csv
-  [ ] reflection.md   <-- not produced
+  [x] reflection.md
 
 --------------------------------------------------------------------------
 6. PROBLEMS
