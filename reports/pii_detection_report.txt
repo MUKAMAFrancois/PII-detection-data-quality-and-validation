@@ -1,0 +1,165 @@
+==========================================================================
+PII DETECTION REPORT - customers_raw.csv
+Generated: 2026-09-05 15:40:51
+Rows scanned: 2998   Ragged rows excluded: 5
+==========================================================================
+
+--------------------------------------------------------------------------
+1. PII INVENTORY
+--------------------------------------------------------------------------
+  DIRECT IDENTIFIERS (4 columns)
+    first_name      MEDIUM   2952/2998 populated
+      names a person; low uniqueness alone, high in combination
+    last_name       MEDIUM   2946/2998 populated
+      names a person; family linkage across records
+    email           HIGH     2958/2998 populated
+      unique contact identifier; phishing and credential-stuffing vector
+    phone           HIGH     2948/2998 populated
+      unique contact identifier; SIM-swap and vishing vector
+  QUASI IDENTIFIERS (3 columns)
+    date_of_birth   HIGH     2955/2998 populated
+      immutable; identity-verification factor and re-identification key
+    address         HIGH     2943/2998 populated
+      physical location; enables real-world harm and household linkage
+    customer_id     LOW      2943/2998 populated
+      internal pseudonymous key; identifying only with system access
+  SENSITIVE IDENTIFIERS (1 column)
+    income          HIGH     2964/2998 populated
+      financial data; discrimination and targeting risk
+  NON-PII: account_status, created_date
+
+  8 of 10 columns carry PII.
+
+--------------------------------------------------------------------------
+2. REGEX DETECTION
+--------------------------------------------------------------------------
+  email  (pattern: something@domain.tld)
+    present values        : 2958
+    well-formed addresses : 2863 (96.8%)
+    contain an address    : 2909
+    malformed but present : 46
+    no address detected   : 49
+      e.g. a********@gmail.com x2
+      e.g. j********@gmail.com x1
+      e.g. ?********@gmail.com x1
+      e.g. e********@yahoo.com x1
+      e.g. j********@gmail.com. x1
+  phone  (pattern: optional +CC, then 3-3-4 digits)
+    present values        : 2948
+    standard XXX-XXX-XXXX : 2872 (97.4%)
+    detected as a phone   : 2925
+    non-standard but real : 53
+    no phone detected     : 23
+      e.g. ***-***-1858 x1
+      e.g. ***-***-2848 x1
+      e.g. ***-***-8859 x1
+      e.g. ***-***-3161 x1
+      e.g. ***-***-1692 x1
+
+  Regex recall: 2909 emails and 2925 phones recovered from raw text.
+
+--------------------------------------------------------------------------
+3. FREE-TEXT LEAKAGE
+--------------------------------------------------------------------------
+  Contact and financial identifiers found in columns that
+  are not declared as holding them.
+  address      email=0, phone=0, SSN=0, credit card=0
+  first_name   email=0, phone=0, SSN=0, credit card=0
+  last_name    email=0, phone=0, SSN=0, credit card=0
+
+  Total leaked identifiers: 0
+  No contact or financial data leaked into free text.
+
+--------------------------------------------------------------------------
+4. OCCURRENCE COUNTS
+--------------------------------------------------------------------------
+  column          populated  distinct  unique  shared
+  first_name           2952        74      35      39
+  last_name            2946        67      27      40
+  email                2958      1842    1086     756
+  phone                2948      2922    2902      20
+  date_of_birth        2955      2758    2592     166
+  address              2943      2914    2905       9
+  income               2964      2946    2935      11
+  customer_id          2943      2918    2899      19
+
+  PII cells populated: 23609 across 2998 records
+  Average PII fields per record: 7.9 of 8
+  'unique' values identify exactly one record and carry the
+  highest re-identification risk.
+
+--------------------------------------------------------------------------
+5. RE-IDENTIFICATION RISK
+--------------------------------------------------------------------------
+  full name
+    comparable records : 2900
+    distinct combos    : 558
+    k=1 (unique)       : 132 (4.6% of comparable)
+    largest group      : k=17
+  full name + DOB
+    comparable records : 2859
+    distinct combos    : 2853
+    k=1 (unique)       : 2847 (99.6% of comparable)
+    largest group      : k=2
+  DOB + address
+    comparable records : 2901
+    distinct combos    : 2895
+    k=1 (unique)       : 2889 (99.6% of comparable)
+    largest group      : k=2
+  quasi-identifier set
+    comparable records : 2867
+    distinct combos    : 2861
+    k=1 (unique)       : 2855 (99.6% of comparable)
+    largest group      : k=2
+
+  Records with >=1 direct identifier : 2998 of 2998
+  Records directly contactable       : 2997 of 2998
+  k=1 means the combination is unique in this file, so
+  removing names alone would not anonymise those records.
+
+--------------------------------------------------------------------------
+6. BREACH IMPACT ASSESSMENT
+--------------------------------------------------------------------------
+  column          sensitivity    cells  weight    score
+  first_name      MEDIUM          2952       2     5904
+  last_name       MEDIUM          2946       2     5892
+  email           HIGH            2958       3     8874
+  phone           HIGH            2948       3     8844
+  date_of_birth   HIGH            2955       3     8865
+  address         HIGH            2943       3     8829
+  income          HIGH            2964       3     8892
+  customer_id     LOW             2943       1     2943
+  TOTAL                          23609            59043
+
+  Exposure score: 59043 of a possible 59960 (98.5%)
+  HIGH-sensitivity columns: email, phone, date_of_birth, address, income
+
+  If this file leaked:
+    - 2958 email addresses and 2948 phone numbers become a direct
+      phishing, smishing and credential-stuffing target list.
+    - 2955 birth dates combine with names to defeat knowledge-based
+      identity verification; unlike a password, a DOB cannot be reset.
+    - 2943 home addresses expose customers to physical risk and
+      allow household-level linkage.
+    - 2964 income figures are financial data, carrying discrimination
+      and targeting risk for a fintech's customer base.
+
+  Aggravating factor: this is a financial services dataset, so a
+  breach is reportable and the records support both identity theft
+  and account takeover without further enrichment.
+
+--------------------------------------------------------------------------
+7. SUMMARY
+--------------------------------------------------------------------------
+  8 PII columns, 5 rated HIGH sensitivity.
+  23609 populated PII cells across 2998 records.
+  Regex recovered 2909 emails and 2925 phones.
+
+  Required before this data is shared:
+    [HIGH]   mask direct identifiers (see masked_sample.txt)
+    [HIGH]   mask DOB and address; names alone are not the risk
+    [MEDIUM] restrict income by access policy rather than masking
+    [MEDIUM] keep the raw file access-controlled and never in a repo
+
+END OF REPORT
+==========================================================================
