@@ -1,6 +1,6 @@
 ==========================================================================
 VALIDATION RESULTS - customers_raw.csv (pre-cleaning)
-Generated: 2026-09-05 18:27:20
+Generated: 2026-09-05 18:33:44
 Source: customers_raw.csv   Rows validated: 2998
 Engine: Pydantic v2 (row rules) + pandas (uniqueness)
 ==========================================================================
